@@ -80,4 +80,65 @@ def evaluate(result):
             eval_result[1] += 1
     # return evaluation result
     return eval_result
+ def main():
+    """ k-nearest neighbors classifier """
  
+    # initialize runtime
+    start = time.clock()
+ 
+    # data tests, 1 = lung cancer data test,
+    # 2 = iris data test
+    data_tests = [1,2] 
+ 
+    for d in data_tests:
+        if d == 1:
+            # read dataset of lung cancer 
+            dtrain, dtr_label = read_data('lung-cancer-train.csv')
+            dtest, true_class = read_data('lung-cancer-test.csv')
+        else:
+            # read dataset of lung cancer
+            dtrain, dtr_label = read_data('iris-train.csv')
+            dtest, true_class = read_data('iris-test.csv')
+ 
+        # initialize K
+        K = [1,3,7,11]
+ 
+        # distance function for euclidean (1), manhattan (2), 
+        # and cosine (3)
+        dist_fn = [1,2,3]
+ 
+        if d == 1:
+            print "k-NN classification results for lung cancer data set:"
+        else:
+            print "k-NN classification results for iris data set:"
+ 
+        print
+        print "    Number of correct / wrong classified test records"
+        print "k  | Euclidean dist | Manhattan dist | Cosine dist"
+ 
+        # run knn classifier for each k and distance function
+        for i in range(len(K)):
+            # classification result for each distance function
+            results = []
+            for j in range(len(dist_fn)):
+                # predict the data test into class
+                pred_class = knn(K[i], dtrain, dtest, dtr_label, dist_fn[j])
+                # evaluate the predicted result
+                eval_result = evaluate(pred_class-true_class)
+                # assign the evaluated result into classification result
+                results.append(eval_result[0])
+                results.append(eval_result[1])
+ 
+            # print the classification result into the screen
+            print K[i], " |     ", results[0], "/", results[1], \
+                "    |    ", results[2], "/", results[3], \
+                "     |    ", results[4], "/", results[5]
+            results = []
+        print
+ 
+    # retrieve 
+    run_time = time.clock() - start
+    print "Runtime:", run_time
+ 
+if __name__ == '__main__':
+    main()
