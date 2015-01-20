@@ -6,16 +6,15 @@ class Exampleone(QtGui.QWidget):
     
     def __init__(self):
         super(Exampleone, self).__init__()
-        
         self.initUI()
         
     def initUI(self):      
 
-        cb = QtGui.QCheckBox('Show title', self)
+        cb = QtGui.QCheckBox('time pass]', self)
         cb.move(20, 20)
         cb.toggle()
         cb.stateChanged.connect(self.changeTitle)
-        
+   
         self.setGeometry(300, 300, 250, 150)
         self.setWindowTitle('QtGui.QCheckBox')
         self.show()
