@@ -3,7 +3,7 @@ from PyQt4 import QtGui,QtCore
 #add frontend here
 
 class Exampleone(QtGui.QWidget):
-    
+    #remove this
     def __init__(self):
         super(Exampleone, self).__init__()
         self.initUI()
