@@ -66,7 +66,7 @@ class kClusterer:
                    self.data[cell].append(cells[cell])
                    toggle = 1
                 else:
-                    self.data[cell].append(float(cells[cell]))
+                    self.data[cell].append(float(cells[cell]))#Here every numerical attribute should be numerical hence there is a change that is to be done
                     
         self.datasize = len(self.data[1])
         self.memberOf = [-1 for x in range(len(self.data[1]))]
@@ -93,7 +93,7 @@ class kClusterer:
         #    members[centroid]=1;
         for i in range(1,len(self.centroids)):
             if members[i]== 0:
-                km = kClusterer('mks.csv',9)#get file name from GUI
+                km = kClusterer('survey.csv',9)#get file name from GUI
                 km.kCluster()
                 km.showMembers()
                 return     
@@ -166,6 +166,6 @@ class kClusterer:
                  print (name)
         
 
-km = kClusterer('mks.csv',9)
+km = kClusterer('survey.csv',9)
 km.kCluster()
 km.showMembers()
