@@ -1,8 +1,3 @@
-#K nearest Neighbour classification using python
-#using numpy and scipy
-#uses sample data set of cancer obtained from google 
-# initial K values are loaded from sample set as 1 3 7 11
-
 import numpy as np
 import scipy.spatial.distance as ssd
 import time
@@ -80,7 +75,9 @@ def evaluate(result):
             eval_result[1] += 1
     # return evaluation result
     return eval_result
- def main():
+
+
+def main():
     """ k-nearest neighbors classifier """
  
     # initialize runtime
@@ -91,14 +88,14 @@ def evaluate(result):
     data_tests = [1,2] 
  
     for d in data_tests:
-        if d == 1:
+        #if d == 3:
             # read dataset of lung cancer 
-            dtrain, dtr_label = read_data('lung-cancer-train.csv')
-            dtest, true_class = read_data('lung-cancer-test.csv')
-        else:
+            #dtrain, dtr_label = read_data('lung-cancer-train.csv')
+            #dtest, true_class = read_data('lung-cancer-test.csv')
+        #else:
             # read dataset of lung cancer
-            dtrain, dtr_label = read_data('iris-train.csv')
-            dtest, true_class = read_data('iris-test.csv')
+        dtrain, dtr_label = read_data('iris-train.csv')
+        dtest, true_class = read_data('iris-test.csv')
  
         # initialize K
         K = [1,3,7,11]
