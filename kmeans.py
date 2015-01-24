@@ -91,6 +91,12 @@ class kClusterer:
         #a change was made
        # if members[centroid] == 0:
         #    members[centroid]=1;
+        for i in range(1,len(self.centroids)):
+            if members[i]== 0:
+                km = kClusterer('mks.csv',9)#get file name from GUI
+                km.kCluster()
+                km.showMembers()
+                return     
             
        # print len(self.centroids),len(self.data[0]),members[centroid]
         self.centroids = [[sum([self.data[k][i]
@@ -160,6 +166,6 @@ class kClusterer:
                  print (name)
         
 
-km = kClusterer('mks.csv',7)
+km = kClusterer('mks.csv',9)
 km.kCluster()
 km.showMembers()
