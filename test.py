@@ -224,11 +224,79 @@ class Gamma():
 			#print "plotting graph"
 			pw.plot(self.x,self.y)
 			#pl.show()
+##########################################################################
+class Pareto():#range restricted to 10000
+                def __init__(self):
+                        self.x=[]
+                        self.y=[]
+                        a=self.shape=random.randint(1,10000)
+                        #a=2
+                        for i in range(1,random.randint(1,1000)):
+                                       self.x.append(i)
+                                       fx=((a*1.0)*(pow(i,-(a+1))))
+                                       self.y.append(fx)
+                def graph(self,pw):
+                        pw.plot(self.x,self.y)
+###############################################################################                                                   
+class Chi2():
 
-
-
+        def __init__(self):
+                self.x=[]
+                self.y=[]
+                v=self.sdof=random.randint(1,100)
+                #print "v",v
+                #v=1
+                for i in range(1,random.randint(0,1000)):
+                               self.x.append(i)
+                               aa=(v-2)/2.0
+                               numerator=(pow(i,aa))*exp(-(i/2.0))
+                               denominator=(pow(2,(v/2.0)))*(gamma(v/2.0))
+                               fx=numerator/denominator
+                               #print fx
+                               self.y.append(fx)
+        def graph(self,pw):
+                pw.plot(self.x,self.y)
 ################################################################
+class Student():
 
+        def __init__(self):
+                self.x=[]
+                self.y=[]
+                #v=self.sdof=random.randint(1,100)
+                v=1
+                for i in range(0,40):
+                        self.x.append(i)
+                        numerator=gamma((v+1)/2.0)*(pow((1+(i/(v*v*1.0))),-(v+1)/2.0))
+                        denominator=math.sqrt(v*(22/7.0))*gamma(v/2.0)
+                        #print numerator,denominator
+                        fx=numerator/denominator
+                        self.y.append(fx)
+        def graph(self,pw):
+                pw.plot(self.x,self.y)
+
+                
+                
+
+##########################################################
+class Ray():
+        def __init__(self):
+                self.x=[]
+                self.y=[]
+                #a=self.alpha=random.randint(1,100)
+                a=2
+                for i in range(0,500):
+                        self.x.append(i)
+                        numerator=i*(exp(-i*i/2*a*a*1.0))
+                        denominator=a*a*1.0
+                        print numerator,denominator,i
+                        fx=numerator/denominator
+                        self.y.append(fx)
+        def graph(self,pw):
+                pw.plot(self.x,self.y)
+
+
+
+#################################################################
 class DisPlot(QtGui.QMainWindow):
     def __init__(self):
         super(DisPlot,self).__init__()
@@ -265,6 +333,10 @@ class DisPlot(QtGui.QMainWindow):
        self.combo.addItem("LOGNORMAL")
        self.combo.addItem("ERLANG")
        self.combo.addItem("GAMMA")
+       self.combo.addItem("PARETO")
+       self.combo.addItem("CHI2")
+       self.combo.addItem("STUDENT-T")
+       self.combo.addItem("RAY")
        
        self.combo.activated[str].connect(self.draw)
        #self.toolbar = self.addToolBar(
@@ -275,6 +347,15 @@ class DisPlot(QtGui.QMainWindow):
        self.setCentralWidget(pw)
        if txt == "BINOMIAL":
           xx=Binomial()
+          xx.graph(pw)
+       elif txt == "RAY":
+          xx=Ray()
+          xx.graph(pw)   
+       elif txt == "STUDENT-T":
+          xx=Student()
+          xx.graph(pw)
+       elif txt == "CHI2":
+          xx=Chi2()
           xx.graph(pw)
        elif txt == "POISSON":
           xx=Poisson()
@@ -308,7 +389,10 @@ class DisPlot(QtGui.QMainWindow):
           xx=Gamma()
           xx.graph(pw)
        #pw.plot(self.x,self.y)
-
+       elif txt=="PARETO":
+          #pl.clf()
+          xx=Pareto()
+          xx.graph(pw)
        
 class KmeansG(QtGui.QWidget):
     def __init__(self):
