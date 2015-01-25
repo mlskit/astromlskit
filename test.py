@@ -47,7 +47,7 @@ class Poisson():
 			self.y.append(f)
 
 	def graph(self,pw):
-		pl.plot(self.x,self.y)
+		pw.plot(self.x,self.y)
 		#pl.show()
 	def rand(self):
 		return self.y
@@ -255,12 +255,16 @@ class DisPlot(QtGui.QMainWindow):
        self.lbl = QtGui.QLabel("Distributions", self)
        self.toolbar.addWidget(self.lbl)
        self.toolbar.addWidget(self.combo)
-       self.combo.addItem("Binomial")
+       self.combo.addItem("BINOMIAL")
        self.combo.addItem("F")
        self.combo.addItem("NORMAL")
        self.combo.addItem("EXPONENTIAL")
        self.combo.addItem("BETA")
        self.combo.addItem("BERN")
+       self.combo.addItem("POISSON")
+       self.combo.addItem("LOGNORMAL")
+       self.combo.addItem("ERLANG")
+       self.combo.addItem("GAMMA")
        
        self.combo.activated[str].connect(self.draw)
        #self.toolbar = self.addToolBar(
@@ -269,7 +273,7 @@ class DisPlot(QtGui.QMainWindow):
     def draw(self,txt):
        pw = pg.PlotWidget(name='Plot1')
        self.setCentralWidget(pw)
-       if txt == "Binomial":
+       if txt == "BINOMIAL":
           xx=Binomial()
           xx.graph(pw)
        elif txt == "POISSON":
