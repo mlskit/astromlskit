@@ -5,6 +5,7 @@ import pyqtgraph as pg
 import random
 from numpy import *
 from math import *
+import numpy as np
 
 #######################################################################################################
 class Binomial():
@@ -293,8 +294,36 @@ class Ray():
                         self.y.append(fx)
         def graph(self,pw):
                 pw.plot(self.x,self.y)
+#############################################################
+class visuals(QtGui.QMainWindow):
+    def __init__(self):
+        super(visuals,self).__init__()
+        self.initUI()
+        
+    def initUI(self):
+        self.setGeometry(300, 300, 350, 300)
+        self.setWindowTitle('File dialog')
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&File')
+        fileMenu = menubar.addMenu('&View')
+        fileMenu = menubar.addMenu('&Tools')
+        fileMenu = menubar.addMenu('&Window')
+        fileMenu = menubar.addMenu('&Help')
+        self.show()
 
-
+    def draw(self):
+        view = pg.GraphicsLayoutWidget()  ## GraphicsView with GraphicsLayout inserted by default
+        self.setCentralWidget(view)
+        w1 = view.addPlot()
+        n = 300
+        s1 = pg.ScatterPlotItem(size=10, pen=pg.mkPen(None), brush=pg.mkBrush(255, 255, 255, 120))
+        pos = np.random.normal(size=(2,n), scale=1e-5)
+        spots = [{'pos': pos[:,i], 'data': 1} for i in range(n)] + [{'pos': [0,0], 'data': 1}]
+        s1.addPoints(spots)
+        w1.addItem(s1)
+        w1.show()
+        
+            
 
 #################################################################
 class DisPlot(QtGui.QMainWindow):
@@ -393,7 +422,9 @@ class DisPlot(QtGui.QMainWindow):
           #pl.clf()
           xx=Pareto()
           xx.graph(pw)
-       
+###############################################################################################################################################
+          ## Clustering algorithms
+#################################################################################################################################################
 class KmeansG(QtGui.QWidget):
     def __init__(self):
         super(KmeansG, self).__init__()
@@ -422,7 +453,9 @@ class KmeansG(QtGui.QWidget):
         km.kCluster()
         km.showMembers()
         #exit(0)
-        
+################################################################################################################################################
+
+#DummY test code
 class Example(QtGui.QWidget):
     
     def __init__(self):
@@ -448,27 +481,31 @@ class Example(QtGui.QWidget):
         else:
             self.setWindowTitle('')
 
-
+################################################################################################################################################
 class App(QtGui.QMainWindow):
     
     def __init__(self):
         super(App, self).__init__()
-        
         self.initUI()
 
-    def testme(self):
+    def scatter(self):
+        self.w= visuals()
+        self.w.draw()
+#        pass
+    def dist(self):
         print "Opening a new popup window..."
         self.w = DisPlot()
         self.w.show()
+    def testme(self):
+        pass
     def Scat(self):
-        print "Opening a new popup sca window..."
-        self.w = DisPlot()
-        self.w.show()
         pass
     def kmn(self):
         print "Doing Kmeans  ...."
         self.w=KmeansG()
         self.w.show()
+    def knn(self):
+        pass
     
     def initUI(self):               
         
@@ -502,7 +539,7 @@ class App(QtGui.QMainWindow):
     
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Visualisation')
-        fileMenu.addAction('Scatter Plots',self.testme)
+        fileMenu.addAction('Scatter Plots',self.scatter)
         fileMenu.addAction('Dendograms',self.testme)
         fileMenu.addAction('Biplots',self.testme)
         fileMenu.addAction('Andrew Plots',self.testme)
@@ -519,7 +556,7 @@ class App(QtGui.QMainWindow):
 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Distribution')
-        fileMenu.addAction('All-in-one',self.testme)
+        fileMenu.addAction('All-in-one',self.dist)
         
         
         self.setGeometry(100, 100, 700, 600)
