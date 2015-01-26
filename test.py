@@ -1,6 +1,6 @@
 import sys
 from PyQt4 import QtGui,QtCore
-#import kmeans
+import kmeans
 import pyqtgraph as pg
 import random
 from numpy import *
@@ -465,6 +465,10 @@ class App(QtGui.QMainWindow):
         self.w = DisPlot()
         self.w.show()
         pass
+    def kmn(self):
+        print "Doing Kmeans  ...."
+        self.w=KmeansG()
+        self.w.show()
     
     def initUI(self):               
         
@@ -491,8 +495,10 @@ class App(QtGui.QMainWindow):
         fileMenu = menubar.addMenu('Machine learning')
         fileMenu1 = fileMenu.addMenu('Dumb')
         fileMenu1.addAction('classification',self.testme)
-        fileMenu1.addAction('cluster Analysis',self.Scat)
+        fileMenu1.addAction('cluster Analysis',self.Scat)        
         fileMenu1.addAction('feature selection',self.Scat)
+        fileMenu1.addAction('Kmeans',self.kmn)
+        fileMenu1.addAction('KNN',self.knn)
     
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Visualisation')
