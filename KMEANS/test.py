@@ -315,12 +315,20 @@ class visuals(QtGui.QMainWindow):
         view = pg.GraphicsLayoutWidget()  ## GraphicsView with GraphicsLayout inserted by default
         self.setCentralWidget(view)
         w1 = view.addPlot()
-        n = 300
+        n = 5
         s1 = pg.ScatterPlotItem(size=10, pen=pg.mkPen(None), brush=pg.mkBrush(255, 255, 255, 120))
         pos = np.random.normal(size=(2,n), scale=1e-5)
         spots = [{'pos': pos[:,i], 'data': 1} for i in range(n)] + [{'pos': [0,0], 'data': 1}]
         s1.addPoints(spots)
         w1.addItem(s1)
+        w1.show()
+        w2 = view.addPlot()
+        n = 5
+        s2 = pg.ScatterPlotItem(size=10, pen=pg.mkPen(None), brush=pg.mkBrush(100, 100, 255, 120))
+        pos = np.random.normal(size=(2,n), scale=1e-5)
+        spots = [{'pos': pos[:,i], 'data': 1} for i in range(n)] + [{'pos': [0,0], 'data': 1}]
+        s2.addPoints(spots)
+        w1.addItem(s2)
         w1.show()
         
             
@@ -491,6 +499,8 @@ class App(QtGui.QMainWindow):
     def scatter(self):
         self.w= visuals()
         self.w.draw()
+        #self.w.draw()
+        
 #        pass
     def dist(self):
         print "Opening a new popup window..."
