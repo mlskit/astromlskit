@@ -1,56 +1,76 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import division
-import collections
+from collections import Counter
 import math
- 
-class Model: 
-        def __init__(self, arffFile):
-                self.trainingFile = arffFile
-                self.features = {}      #all feature names and their possible values (including the class label)
-                self.featureNameList = []       #this is to maintain the order of features as in the arff
-                self.featureCounts = collections.defaultdict(lambda: 1)#contains tuples of the form (label, feature_name, feature_value)
-                self.featureVectors = []        #contains all the values and the label as the last entry
-                self.labelCounts = collections.defaultdict(lambda: 0)   #these will be smoothed later
- 
-        def TrainClassifier(self):
-                for fv in self.featureVectors:
-                        self.labelCounts[fv[len(fv)-1]] += 1 #udpate count of the label
-                        for counter in range(0, len(fv)-1):
-                                self.featureCounts[(fv[len(fv)-1], self.featureNameList[counter], fv[counter])] += 1
- 
-                for label in self.labelCounts:  #increase label counts (smoothing). remember that the last feature is actually the label
-                        for feature in self.featureNameList[:len(self.featureNameList)-1]:
-                                self.labelCounts[label] += len(self.features[feature])
- 
-        def Classify(self, featureVector):      #featureVector is a simple list like the ones that we use to train
-                probabilityPerLabel = {}
-                for label in self.labelCounts:
-                        logProb = 0
-                        for featureValue in featureVector:
-                                logProb += math.log(self.featureCounts[(label, self.featureNameList[featureVector.index(featureValue)], featureValue)]/self.labelCounts[label])
-                        probabilityPerLabel[label] = (self.labelCounts[label]/sum(self.labelCounts.values())) * math.exp(logProb)
-                print probabilityPerLabel
-                return max(probabilityPerLabel, key = lambda classLabel: probabilityPerLabel[classLabel])
-                                
-        def GetValues(self):
-                file = open(self.trainingFile, 'r')
-                for line in file:
-                        if line[0] != '@':  #start of actual data
-                                self.featureVectors.append(line.strip().lower().split(','))
-                        else:   #feature definitions
-                                if line.strip().lower().find('@data') == -1 and (not line.lower().startswith('@relation')):
-                                        self.featureNameList.append(line.strip().split()[1])
-                                        self.features[self.featureNameList[len(self.featureNameList) - 1]] = line[line.find('{')+1: line.find('}')].strip().split(',')
-                file.close()
- 
-        def TestClassifier(self, arffFile):
-                file = open(arffFile, 'r')
-                for line in file:
-                        if line[0] != '@':
-                                vector = line.strip().lower().split(',')
-                                print "classifier: " + self.Classify(vector) + " given " + vector[len(vector) - 1]                                
+
+class ClassifierNotTrainedException(Exception):
+	
+	def __str__(self):
+		return "Classifier is not trained."
+
+class Classy(object):
+	
+	def __init__(self):
+		self.term_count_store = {}
+		self.data = {
+			'class_term_count': {},
+			'beta_priors': {},
+			'class_doc_count': {},
+		}
+		self.total_term_count = 0
+		self.total_doc_count = 0
 		
-if __name__ == "__main__":
-        model = Model("/home/tennis.arff")
-        model.GetValues()
-        model.TrainClassifier()
-        model.TestClassifier("/home/tennis.arff")
+	def train(self, document_source, class_id):
+		'''
+		Trains the classifier.
+		
+		'''
+		count = Counter(document_source)
+		try:
+			self.term_count_store[class_id]
+		except KeyError:
+			self.term_count_store[class_id] = {}
+		for term in count:
+			try:
+				self.term_count_store[class_id][term] += count[term]
+			except KeyError:
+				self.term_count_store[class_id][term] = count[term]
+		try:
+			self.data['class_term_count'][class_id] += document_source.__len__()
+		except KeyError:
+			self.data['class_term_count'][class_id] = document_source.__len__()
+		try:
+			self.data['class_doc_count'][class_id] += 1
+		except KeyError:
+			self.data['class_doc_count'][class_id] = 1
+		self.total_term_count += document_source.__len__()
+		self.total_doc_count += 1
+		self.compute_beta_priors()
+		return True
+		
+	def classify(self, document_input):
+		if not self.total_doc_count: raise ClassifierNotTrainedException()
+		
+		term_freq_matrix = Counter(document_input)
+		arg_max_matrix = []
+		for class_id in self.data['class_doc_count']:
+			summation = 0
+			for term in document_input:
+				try:
+					conditional_probability = (self.term_count_store[class_id][term] + 1)
+					conditional_probability = conditional_probability / (self.data['class_term_count'][class_id] + self.total_doc_count)
+					summation += term_freq_matrix[term] * math.log(conditional_probability)
+				except KeyError:
+					break
+			arg_max = summation + self.data['beta_priors'][class_id]
+			arg_max_matrix.insert(0, (class_id, arg_max))
+		arg_max_matrix.sort(key=lambda x:x[1])
+		return (arg_max_matrix[-1][0], arg_max_matrix[-1][1])
+		
+	def compute_beta_priors(self):
+		if not self.total_doc_count: raise ClassifierNotTrainedException()
+		
+		for class_id in self.data['class_doc_count']:
+			tmp = self.data['class_doc_count'][class_id] / self.total_doc_count
+			self.data['beta_priors'][class_id] = math.log(tmp)
