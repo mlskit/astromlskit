@@ -69,6 +69,7 @@ class HaltonSequence:
             self.quasi[i] = g+h-f
         return self.quasi
 
+'''#thanks to GNU GSL
 class SobolSequence:
     "From the Gnu Scientific Library"
     def __init__(self,dim):
@@ -199,12 +200,13 @@ class SobolSequence:
             v[i_dimension] = new_numerator_i*self.last_denominator_inv
         self.sequence_count += 1
         return v
-        
+     '''       
 
 if __name__ == '__main__':
-    #for x in halton(10000,19): print x
-    ss = SobolSequence(3)
+    for x in halton(10,19): print x
+    print halton(12)
+    '''ss = SobolSequence(3)
     for i in range(10000):
         x,y,z = ss()
         print x,y,z
-
+    '''
