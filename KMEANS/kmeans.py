@@ -1,329 +1,158 @@
-from __future__ import division
-import numpy as np
-from numpy import linalg
-
-import _kmeans
-from utils import get_pyrandom
-from normalise import zscore
-
-__all__ = [
-        'kmeans',
-        'select_best_kmeans',
-        'repeated_kmeans',
-        ]
+from util import ClusteringError, centroid, minkowski_distance
 
 
-try:
-    # This tests for the presence of 3-argument np.dot
-    # with the 3rd argument being the output argument
-    _x = np.array([
-            [1., 1.],
-            [0.,1.]] )
-    _y = np.array([2., 4.])
-    _r = np.array([0.,0.])
-    np.dot(_x, _y, _r)
-    if _r[0] != 6 or _r[1] != 4:
-        raise NotImplementedError
-    _dot3 = np.dot
-except:
-    def _dot3(x, y, _):
-        return np.dot(x,y)
-finally:
-    del _x
-    del _y
-    del _r
+class KMeansClustering(object):
+    """
+    Implementation of the kmeans clustering method as explained in a tutorial_
+    by *matteucc*.
 
-def _mahalanobis2(fmatrix, x, icov):
-    diff = fmatrix-x
-    # The expression below seems to be faster than looping over the elements and summing
-    return np.dot(diff, np.dot(icov, diff.T)).diagonal()
+    .. _tutorial: http://www.elet.polimi.it/upload/matteucc/Clustering/tutorial_html/kmeans.html
 
-def centroid_errors(fmatrix, assignments, centroids):
-    '''
-    errors = centroid_errors(fmatrix, assignments, centroids)
+    Example:
 
-    Computes the following::
+      >>> from cluster import KMeansClustering
+      >>> cl = KMeansClustering([(1,1), (2,1), (5,3), ...])
+      >>> clusters = cl.getclusters(2)
 
-        for all i, j:
-            ci = assignments[i]
-            errors[i,j] = fmatrix[ci, j] - centroids[ci, j]
+    :param data: A list of tuples or integers.
+    :param distance: A function determining the distance between two items.
+        Default (if ``None`` is passed): It assumes the tuples contain numeric
+        values and appiles a generalised form of the euclidian-distance
+        algorithm on them.
+    :param equality: A function to test equality of items. By default the
+        standard python equality operator (``==``) is applied.
+    :raises ValueError: if the list contains heterogeneous items or if the
+        distance between items cannot be determined.
+    """
 
-    Parameters
-    ----------
-    fmatrix : 2D ndarray
-        feature matrix
-    assignments : 1D ndarray
-        Assignments array
-    centroids : 2D ndarray
-        centroids
+    def __init__(self, data, distance=None, equality=None):
+        self.__clusters = []
+        self.__data = data
+        self.distance = distance
+        self.__initial_length = len(data)
+        self.equality = equality
 
-    Returns
-    -------
-    errors : float
-        Difference between fmatrix and corresponding centroid
-    '''
-    errors = []
-    for k,c in enumerate(centroids):
-        errors.append(fmatrix[assignments == k] - c)
-    return np.concatenate(errors)
+        # test if each item is of same dimensions
+        if len(data) > 1 and isinstance(data[0], tuple):
+            control_length = len(data[0])
+            for item in data[1:]:
+                if len(item) != control_length:
+                    raise ValueError("Each item in the data list must have "
+                                     "the same amount of dimensions. Item "
+                                     "%r was out of line!" % (item,))
+        # now check if we need and have a distance function
+        if (len(data) > 1 and not isinstance(data[0], tuple) and
+                distance is None):
+            raise ValueError("You supplied non-standard items but no "
+                             "distance function! We cannot continue!")
+        # we now know that we have tuples, and assume therefore that it's
+        # items are numeric
+        elif distance is None:
+            self.distance = minkowski_distance
 
-def residual_sum_squares(fmatrix,assignments,centroids,distance='euclidean',**kwargs):
-    '''
-    rss = residual_sum_squares(fmatrix, assignments, centroids, distance='euclidean', **kwargs)
+    def getclusters(self, count):
+        """
+        Generates *count* clusters.
 
-    Computes residual sum squares
+        :param count: The amount of clusters that should be generated.  count
+            must be greater than ``1``.
+        :raises ClusteringError: if *count* is out of bounds.
+        """
 
-    Parameters
-    ----------
-    fmatrix : 2D ndarray
-        feature matrix
-    assignments : 1D ndarray
-        Assignments array
-    centroids : 2D ndarray
-        centroids
+        # only proceed if we got sensible input
+        if count <= 1:
+            raise ClusteringError("When clustering, you need to ask for at "
+                                  "least two clusters! "
+                                  "You asked for %d" % count)
 
-    Returns
-    -------
-    rss : float
-        residual sum squares
-    '''
-    if distance != 'euclidean':
-        raise NotImplemented("residual_sum_squares only implemented for 'euclidean' distance")
-    rss = 0.0
-    for k, c in enumerate(centroids):
-        diff = fmatrix[assignments == k] - c
-        diff = diff.ravel()
-        rss += np.dot(diff, diff)
-    return rss
+        # return the data straight away if there is nothing to cluster
+        if (self.__data == [] or len(self.__data) == 1 or
+                count == self.__initial_length):
+            return self.__data
 
-def assign_centroids(fmatrix, centroids, histogram=False, normalize=False, normalise=None):
-    '''
-    cids = assign_centroids(fmatrix, centroids, histogram=False, normalize=False)
+        # It makes no sense to ask for more clusters than data-items available
+        if count > self.__initial_length:
+            raise ClusteringError(
+                "Unable to generate more clusters than "
+                "items available. You supplied %d items, and asked for "
+                "%d clusters." % (self.__initial_length, count))
 
-    Assigns a centroid to each element of fmatrix
+        self.initialise_clusters(self.__data, count)
 
-    Parameters
-    ----------
-    fmatrix : 2D ndarray
-        feature matrix
-    centroids : 2D ndarray
-        centroids matrix
-    histogram : boolean, optional
-        If True, then the result is actually a histogram
-    normalize : boolean, optional
-        If True and ``histogram``, then the histogram is normalized to sum to
-        one.
+        items_moved = True  # tells us if any item moved between the clusters,
+                            # as we initialised the clusters, we assume that
+                            # is the case
 
-    Returns
-    -------
-    cids : sequence
-        ``cids[i]`` is the index of the centroid closes to ``fmatrix[i];`` or,
-        if ``histogram``, then ``cids[i]`` is the number of points that were
-        assigned to centroid ``i.``
-    '''
-    dists = np.dot(fmatrix, (-2)*centroids.T)
-    dists += np.array([np.dot(c,c) for c in centroids])
-    cids = dists.argmin(1)
-    if histogram:
-        hist = np.array(
-            [np.sum(cids == ci) for ci in xrange(len(centroids))],
-            np.float)
-        if (normalize or normalise) and len(fmatrix):
-            hist /= hist.sum()
-        return hist
-    return cids
+        while items_moved is True:
+            items_moved = False
+            for cluster in self.__clusters:
+                for item in cluster:
+                    res = self.assign_item(item, cluster)
+                    if items_moved is False:
+                        items_moved = res
+        return self.__clusters
 
-def _pycomputecentroids(fmatrix, centroids, assignments, counts):
-    k, Nf = centroids.shape
-    bins = np.arange(k+1)
-    ncounts,_ = np.histogram(assignments, bins)
-    counts[:] = ncounts
-    any_empty = False
-    mean = None
-    for ci,count in enumerate(counts):
-        if count:
-            where = (assignments.T == ci)
-            mean = _dot3(where, fmatrix, mean) # mean = dot(fmatrix.T, where.T), but it is better to not cause copies
-            mean /= count
-            centroids[ci] = mean
+    def assign_item(self, item, origin):
+        """
+        Assigns an item from a given cluster to the closest located cluster.
+
+        :param item: the item to be moved.
+        :param origin: the originating cluster.
+        """
+        closest_cluster = origin
+        for cluster in self.__clusters:
+            if self.distance(item, centroid(cluster)) < self.distance(
+                    item, centroid(closest_cluster)):
+                closest_cluster = cluster
+
+        if id(closest_cluster) != id(origin):
+            self.move_item(item, origin, closest_cluster)
+            return True
         else:
-            any_empty = True
-    return any_empty
+            return False
 
-def kmeans(fmatrix, k, distance='euclidean', max_iter=1000, R=None, return_assignments=True, return_centroids=True, **kwargs):
-    '''
-    assignments, centroids = kmean(fmatrix, k, distance='euclidean', max_iter=1000, R=None, icov=None, covmat=None)
-    centroids = kmean(fmatrix, k, distance='euclidean', max_iter=1000, R=None, icov=None, covmat=None, return_assignments=False)
-    assignments= kmean(fmatrix, k, distance='euclidean', max_iter=1000, R=None, icov=None, covmat=None, return_centroids=False)
+    def move_item(self, item, origin, destination):
+        """
+        Moves an item from one cluster to anoter cluster.
 
-    k-Means Clustering
+        :param item: the item to be moved.
+        :param origin: the originating cluster.
+        :param destination: the target cluster.
+        """
+        if self.equality:
+            item_index = 0
+            for i, element in enumerate(origin):
+                if self.equality(element, item):
+                    item_index = i
+                    break
+        else:
+            item_index = origin.index(item)
 
-    Parameters
-    ----------
-    fmatrix : ndarray
-        2-ndarray (Nelements x Nfeatures)
-    distance: string, optional
-        one of:
-        - 'euclidean'   : euclidean distance (default)
-        - 'seuclidean'  : standartised euclidean distance. This is equivalent to first normalising the features.
-        - 'mahalanobis' : mahalanobis distance.
-            This can make use of the following keyword arguments:
-                + 'icov' (the inverse of the covariance matrix),
-                + 'covmat' (the covariance matrix)
-            If neither is passed, then the function computes the covariance from the feature matrix
-    max_iter : integer, optional
-        Maximum number of iteration (default: 1000)
-    R : source of randomness, optional
-    return_centroids : boolean, optional
-        Whether to return centroids (default: True)
-    return_assignments: boolean, optional
-        Whether to return centroid assignments (default: True)
+        destination.append(origin.pop(item_index))
 
-    Returns
-    -------
-    assignments : ndarray
-        An 1-D array of size `len(fmatrix)`
-    centroids : ndarray
-        An array of `k'` centroids
-    '''
-    if not (return_centroids or return_assignments):
-        return None
-    fmatrix = np.asanyarray(fmatrix)
-    if not np.issubdtype(fmatrix.dtype, np.float):
-        fmatrix = fmatrix.astype(np.float)
-    if distance == 'seuclidean':
-        fmatrix = zscore(fmatrix)
-        distance = 'euclidean'
-    if distance == 'euclidean':
-        def distfunction(fmatrix, cs, dists):
-            dists = _dot3(fmatrix, (-2)*cs.T, dists)
-            dists += np.array([np.dot(c,c) for c in cs])
-            # For a distance, we'd need to add the fmatrix**2 components, but
-            # it doesn't matter because we are going to perform an argmin() on
-            # the result.
-            return dists
-    elif distance == 'mahalanobis':
-        icov = kwargs.get('icov', None)
-        if icov is None:
-            covmat = kwargs.get('covmat', None)
-            if covmat is None:
-                covmat = np.cov(fmatrix.T)
-            icov = linalg.inv(covmat)
-        def distfunction(fmatrix, cs, _):
-            return np.array([_mahalanobis2(fmatrix, c, icov) for c in cs]).T
-    else:
-        raise ValueError('milk.unsupervised.kmeans: `distance` argument unknown (%s)' % distance)
-    if k < 2:
-        raise ValueError('milk.unsupervised.kmeans `k` should be >= 2.')
-    if fmatrix.dtype in (np.float32, np.float64) and fmatrix.flags['C_CONTIGUOUS']:
-        computecentroids = _kmeans.computecentroids
-    else:
-        computecentroids = _pycomputecentroids
-    R = get_pyrandom(R)
+    def initialise_clusters(self, input_, clustercount):
+        """
+        Initialises the clusters by distributing the items from the data.
+        evenly across n clusters
 
-    centroids = np.array(R.sample(fmatrix,k), fmatrix.dtype)
-    prev = np.zeros(len(fmatrix), np.int32)
-    counts = np.empty(k, np.int32)
-    dists = None
-    for i in xrange(max_iter):
-        dists = distfunction(fmatrix, centroids, dists)
-        assignments = dists.argmin(1)
-        if np.all(assignments == prev):
-            break
-        if computecentroids(fmatrix, centroids, assignments.astype(np.int32), counts):
-            (empty,) = np.where(counts == 0)
-            centroids = np.delete(centroids, empty, axis=0)
-            k = len(centroids)
-            counts = np.empty(k, np.int32)
-            # This will cause new matrices to be allocated in the next iteration
-            dists = None
-        prev[:] = assignments
-    if return_centroids and return_assignments:
-        return assignments, centroids
-    elif return_centroids:
-        return centroids
-    return assignments
+        :param input_: the data set (a list of tuples).
+        :param clustercount: the amount of clusters (n).
+        """
+        # initialise the clusters with empty lists
+        self.__clusters = []
+        for _ in range(clustercount):
+            self.__clusters.append([])
 
-def repeated_kmeans(fmatrix,k,iterations,distance='euclidean',max_iter=1000,R=None,**kwargs):
-    '''
-    assignments,centroids = repeated_kmeans(fmatrix, k, repeats, distance='euclidean',max_iter=1000,**kwargs)
-
-    Runs kmeans repeats times and returns the best result as evaluated
-    according to distance
-
-    See Also
-    --------
-    kmeans : runs kmeans once
-
-    Parameters
-    ----------
-    fmatrix : feature matrix
-    k : nr of centroids
-    iterations : Nr of repetitions
-    distance : 'euclidean' (default) or 'seuclidean'
-    max_iter : Max nr of iterations per kmeans run
-    R : random source
-
-    Returns
-    -------
-    assignments : 1-D array of assignments
-    centroids : centroids
-
-    These are the same returns as the kmeans function
-    '''
-    kwargs['max_iter'] = max_iter
-    return select_best_kmeans(fmatrix, [k], repeats=iterations, method='loglike', distance=distance, **kwargs)
+        # distribute the items into the clusters
+        count = 0
+        for item in input_:
+            self.__clusters[count % clustercount].append(item)
+            count += 1
 
 
-def select_best_kmeans(fmatrix, ks, repeats=1, method='AIC', R=None, **kwargs):
-    '''
-    assignments,centroids = select_best_kmeans(fmatrix, ks, repeats=1, method='AIC', R=None, **kwargs)
-
-    Runs kmeans repeats times and returns the best result as evaluated
-    according to distance
-
-    See Also
-    --------
-    kmeans : runs kmeans once
-
-    Parameters
-    ----------
-    fmatrix : feature matrix
-    ks : sequence of integers
-        nr of centroids to try
-    iterations : integer, optional
-        Nr of repetitions for each value of k
-    R : random source, optional
-
-    Returns
-    -------
-    assignments : 1-D array of assignments
-    centroids : 2-D ndarray
-        centroids
-
-    These are the same returns as the kmeans function
-    '''
-    best = None
-    best_val = np.inf
-    R = get_pyrandom(R)
-    from milk.unsupervised.gaussianmixture import AIC, BIC, log_likelihood
-    if method == 'AIC':
-        method = AIC
-    elif method == 'BIC':
-        method = BIC
-    elif method == 'loglike':
-        method = log_likelihood
-    else:
-        raise ValueError('milk.kmeans.select_best_kmeans: unknown method: %s' % method)
-    if 'distance' in kwargs and kwargs['distance'] == 'seuclidean':
-        fmatrix = zscore(fmatrix)
-    for k in ks:
-        for i in xrange(repeats):
-            As,Cs = kmeans(fmatrix, k, R=R, **kwargs)
-            value = method(fmatrix, As, Cs)
-            if value < best_val:
-                best_val = value
-                best = As,Cs
-    return best
-
-
+def main():
+    c = KMeansClustering([(1,2), (1,2), (5,3),(2,3),(2,4)])
+    c = KMeansClustering([(1.9,2.3),(1.5,2.5),(0.8,0.6),(0.4,1.8),(0.1,0.1),(0.2,1.8),(2.0,0.5),(0.3,1.5),(1,1)])
+    jj=c.getclusters(4)
+    print jj
+main()
