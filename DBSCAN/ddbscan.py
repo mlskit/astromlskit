@@ -1,5 +1,7 @@
-from  scipy.spatial import cKDTree
+from  scipy.spatial import KDTree
 
+
+# In Python 3.* xrange become default range
 try:
     xrange
 except NameError:
@@ -71,7 +73,7 @@ class DDBSCAN(object):
             self.points_data.append(PointData(count, desc))
 
             # Recreate tree
-            self.tree = cKDTree(self.points)
+            self.tree = KDTree(self.points)
 
             # Update neighbourhood list
             self.points_data[self.last_index].neighbourhood = self.tree.query_ball_point(point, self.eps)
