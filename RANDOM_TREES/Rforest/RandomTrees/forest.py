@@ -73,7 +73,7 @@ class RandomForest(object):
         if os.path.isfile(outfile):
             os.unlink(outfile)
         g.draw(outfile)
-        os.system('evince %s' % outfile)
+        #os.system('evince %s' % outfile)
 
     def __str__(self):
         s = ''

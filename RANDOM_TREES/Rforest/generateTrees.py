@@ -2,25 +2,27 @@ import pydtl
 import csv
 
 db = pydtl.LocalTable()
-reader = csv.reader(open("smaller-dataset.csv"))
+reader = csv.reader(open("dataset.csv"))
 for row in reader:
 	toDict={}	
-	toDict["H"]=float(row[0]);
-	toDict["Hmax"]=float(row[1]);
-	toDict["UqVal"]=float(row[2]);
-	toDict["Favg"]=float(row[3]);
-	toDict["N"]=float(row[4]);
-	toDict["Uval"]=float(row[5]);
-	toDict["pairs"]=float(row[6]);
-	toDict["log_pairs"]=float(row[7]);
-	toDict["Target"]=float(row[8]);
+	toDict["H"]=float(row[1]);
+	toDict["Hmax"]=float(row[2]);
+	toDict["UqVal"]=float(row[3]);
+	toDict["Favg"]=float(row[4]);
+	toDict["N"]=float(row[5]);
+	toDict["Uval"]=float(row[6]);
+	toDict["pairs"]=float(row[7]);
+	toDict["log_pairs"]=float(row[8]);
+	toDict["Target"]=float(row[9]);
 	db.insert(toDict)
 
 # target = variable to learn	
 forest = pydtl.RandomForest(db, target='Target')
-
+forest.grow_tree()
+forest.draw()
 #passing no of trees to generate
-forest.grow_trees(1)
+
+
 print forest
 
 #get mean square error

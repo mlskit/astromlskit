@@ -6,6 +6,9 @@ import random
 from numpy import *
 from math import *
 import numpy as np
+from idleint import *
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
 
 #######################################################################################################
 class Binomial():
@@ -494,6 +497,8 @@ class App(QtGui.QMainWindow):
     
     def __init__(self):
         super(App, self).__init__()
+        self.win = MyInterpreter(None)
+        self.setCentralWidget(self.win)
         self.initUI()
 
     def scatter(self):
@@ -518,7 +523,7 @@ class App(QtGui.QMainWindow):
         pass
     
     def initUI(self):               
-        
+
         exitAction = QtGui.QAction(QtGui.QIcon('exit.png'), '&Exit', self)        
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
@@ -568,13 +573,16 @@ class App(QtGui.QMainWindow):
         fileMenu = menubar.addMenu('Distribution')
         fileMenu.addAction('All-in-one',self.dist)
         
-        
         self.setGeometry(100, 100, 700, 600)
-        self.setWindowTitle('Statistical Toolkit v1.0')    
-        self.show()
+        self.setWindowTitle('Statistical Toolkit v1.0')
+
+        self.layout = QVBoxLayout(self)
         
         
+        self.show()        
+
 def main():
+
     
     app = QtGui.QApplication(sys.argv)
     ex = App()
