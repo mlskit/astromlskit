@@ -59,7 +59,7 @@ class PyInterp(QTextEdit):
 
         # setting the color for bg and text
         palette = QPalette()
-        palette.setColor(QPalette.Base, QColor(0, 0, 0))
+        palette.setColor(QPalette.Base, QColor(0, 10, 0))
         palette.setColor(QPalette.Text, QColor(0, 255, 0))
         self.setPalette(palette)
         self.setFont(QFont('Courier', 12))
@@ -125,6 +125,7 @@ class PyInterp(QTextEdit):
             self.append('') # move down one line
             # vars that are in the command are prefixed with ____CC and deleted
             # once the command is done so they don't show up in dir()
+            #hist dir doesnt show up
             backup = self.interpreterLocals.copy()
             history = self.history[:]
             history.reverse()
@@ -138,6 +139,8 @@ class PyInterp(QTextEdit):
             return True
 
         if re.match('!hist\(\d+\)', command): # recall command from history
+            #recall failure yet to be added
+            #find the bug ??????''''''''
             backup = self.interpreterLocals.copy()
             history = self.history[:]
             history.reverse()
