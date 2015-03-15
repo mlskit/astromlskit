@@ -1,0 +1,26 @@
+Folder,Files,LOC,SLOC-P,SLOC-L,MVG,BLOC,C&SLOC,CLOC,CWORD,HCLOC,HCWORD
+Total,61,9561,7965,146,1172,1596,18,0,46,0,0
+C:\Users\Manikandan R\Documents\GitHub,61,9561,7965,146,1172,1596,18,0,46,0,0
+C:\Users\Manikandan R\Documents\GitHub\ANOVA,3,516,402,6,66,114,1,0,1,0,0
+C:\Users\Manikandan R\Documents\GitHub\ANOVA\1-WAY,3,516,402,6,66,114,1,0,1,0,0
+C:\Users\Manikandan R\Documents\GitHub\DBSCAN,3,206,175,1,24,31,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\DISTANCEMEASURES,1,34,20,0,0,14,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\DOE,1,329,265,2,33,64,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\FRONTEND,3,996,830,7,75,166,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\GENERATORS,1,213,188,0,35,25,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\GMM,7,1428,1212,18,202,216,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\GMM\BASIC GMM,5,772,668,2,89,104,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\HEIRARCHIAL CLUSTERING,6,755,610,1,99,145,5,0,13,0,0
+C:\Users\Manikandan R\Documents\GitHub\HYPOTHESIS TEST,4,95,70,1,13,25,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\KMEANS,2,273,219,0,41,54,5,0,13,0,0
+C:\Users\Manikandan R\Documents\GitHub\KNN,4,498,386,1,31,112,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\LDA,1,59,47,0,2,12,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\NAIVEBAYES,3,179,158,6,14,21,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\RANDOM_TREES,13,2851,2431,57,387,420,4,0,7,0,0
+C:\Users\Manikandan R\Documents\GitHub\RANDOM_TREES\DTREE,2,2053,1801,45,304,252,3,0,6,0,0
+C:\Users\Manikandan R\Documents\GitHub\RANDOM_TREES\Rforest,11,798,630,12,83,168,1,0,1,0,0
+C:\Users\Manikandan R\Documents\GitHub\RANDOM_TREES\Rforest\RandomTrees,10,756,596,2,81,160,1,0,1,0,0
+C:\Users\Manikandan R\Documents\GitHub\RANDOM_TREES\Rforest\RandomTrees\rdbms,2,153,119,0,24,34,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\RANDOM_TREES\Rforest\RandomTrees\test,4,129,92,0,4,37,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\REGRESSION,6,449,356,2,53,93,0,0,0,0,0
+C:\Users\Manikandan R\Documents\GitHub\REGRESSION\LOGISTIC,5,435,345,2,53,90,0,0,0,0,0

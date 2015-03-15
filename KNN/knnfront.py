@@ -126,10 +126,8 @@ class Ui_Form(object):
         y=list(df[list(df)[1]])
         self.classlabels=list(df[list(df)[2]])
         print self.classlabels
-        #print type(self.classlabels)
-        #print x,y
         self.tr=(zip(x,y))
-        #print len(np.array(self.tr).shape)
+        
         
 
     def takeoutput(self):
