@@ -1,4 +1,5 @@
 from util import ClusteringError, centroid, minkowski_distance
+from DM import *
 
 
 class KMeansClustering(object):
@@ -150,9 +151,9 @@ class KMeansClustering(object):
             count += 1
 
 
-def main():
-    c = KMeansClustering([(1,2), (1,2), (5,3),(2,3),(2,4)])
-    c = KMeansClustering([(1.9,2.3),(1.5,2.5),(0.8,0.6),(0.4,1.8),(0.1,0.1),(0.2,1.8),(2.0,0.5),(0.3,1.5),(1,1)])
-    jj=c.getclusters(4)
-    print jj
-main()
+##def main():
+##    #c = KMeansClustering([(1,2), (1,2), (5,3),(2,3),(2,4)])
+####    c = KMeansClustering([(1.9,2.3),(1.5,2.5),(0.8,0.6),(0.4,1.8),(0.1,0.1),(0.2,1.8),(2.0,0.5),(0.3,1.5),(1,1)],chebyshev_distance)
+####    jj=c.getclusters(3)
+####    print jj
+##main()
