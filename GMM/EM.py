@@ -259,7 +259,7 @@ if __name__ == "__main__":
                         [3,1],[4,1],[4,2]], np.float64)
         #t_data = np.array([[1],[3],[1],[2],\
         #                [12],[11],[11],[10]], np.float64)
-        t2 = expectation_maximization(t_data, nbiter=10, normalize=False)
+        t2 = expectation_maximization(t_data, nbiter=1, normalize=False)
         print t2
         plot(t2["clusters"],t_data, "test EM", t2['params'])
         sys.exit(0)

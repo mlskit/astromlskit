@@ -88,7 +88,7 @@ def anova_byHand():
     """
 
      # Get the data
-    data = getData('altman_910.txt', subDir='..\Data\data_altman')
+    data = getData('altman_910.txt', subDir='.')
 
     # Convert them to pandas-forman and group them by their group value
     df = pd.DataFrame(data, columns=['values', 'group'])
@@ -115,8 +115,8 @@ def anova_byHand():
     
 
 if __name__ == '__main__':
-    anova_oneway()
+    #anova_oneway()
     anova_byHand()
-    show_teqf()
-    anova_statsmodels()    
+    #show_teqf()
+    #anova_statsmodels()    
     #raw_input('Done!')

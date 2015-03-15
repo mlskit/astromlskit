@@ -4,7 +4,7 @@ import ddbscan
 scan = ddbscan.DDBSCAN(2, 5)
 
 # Add points to model
-data = [[1,  2], [2,  2], [1,  3], [2, 3], [3, 3], [8, 9],
+data = [[1,  100], [2,  2], [1,  3], [2, 3], [3, 3], [8, 9],
         [7,  6], [9,  7], [6, 9], [6, 8], [5, 5], [7, 8]]
 
 for point in data:
@@ -50,6 +50,7 @@ for x in range(0,10):
         if [x, y] in data:
             index = data.index([x,y])
             cluster = scan.points_data[index].cluster + 1
+            #print cluster
             print symbols[cluster],
         else:
             print ' ',

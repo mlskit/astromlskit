@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>251</width>
-    <height>442</height>
+    <width>250</width>
+    <height>397</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,14 +16,14 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
      <width>221</width>
      <height>61</height>
     </rect>
    </property>
    <property name="title">
-    <string>Learner/Classifier Name</string>
+    <string>Clusterer</string>
    </property>
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
@@ -35,17 +35,17 @@
      </rect>
     </property>
     <property name="text">
-     <string>K Nearest Neighbors</string>
+     <string>K-Means</string>
     </property>
    </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>80</y>
      <width>221</width>
-     <height>80</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="title">
@@ -64,19 +64,6 @@
      <string>Number of neighbors</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>50</y>
-      <width>171</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Wieigh by ranks not distances</string>
-    </property>
-   </widget>
    <widget class="QSpinBox" name="spinBox">
     <property name="geometry">
      <rect>
@@ -88,11 +75,11 @@
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_3">
+  <widget class="QGroupBox" name="groupBox_4">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>170</y>
+     <x>10</x>
+     <y>150</y>
      <width>221</width>
      <height>111</height>
     </rect>
@@ -100,7 +87,7 @@
    <property name="title">
     <string>Distance</string>
    </property>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="comboBox_2">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -109,8 +96,23 @@
       <height>22</height>
      </rect>
     </property>
+    <item>
+     <property name="text">
+      <string>euclidean</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>chebychev</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>cityblock</string>
+     </property>
+    </item>
    </widget>
-   <widget class="QCheckBox" name="checkBox_2">
+   <widget class="QCheckBox" name="checkBox_3">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -120,79 +122,51 @@
      </rect>
     </property>
     <property name="text">
-     <string> Ignore Unknown Values</string>
+     <string>Equality measure</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_4">
+   <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>221</width>
-      <height>111</height>
+      <x>30</x>
+      <y>80</y>
+      <width>111</width>
+      <height>16</height>
      </rect>
     </property>
-    <property name="title">
-     <string>Distance</string>
+    <property name="text">
+     <string>Number of Trails</string>
     </property>
-    <widget class="QComboBox" name="comboBox_2">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>20</y>
-       <width>161</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <item>
-      <property name="text">
-       <string>euclidean</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>chebychev</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>cityblock</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_3">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>50</y>
-       <width>151</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string> Ignore Unknown Values</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_4">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>80</y>
-       <width>181</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string> Normalize continous attributes</string>
-     </property>
-    </widget>
    </widget>
+   <widget class="QSpinBox" name="spinBox_2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>70</y>
+      <width>42</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>340</y>
+     <width>161</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Start</string>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>300</y>
+     <x>40</x>
+     <y>280</y>
      <width>161</width>
      <height>23</height>
     </rect>
@@ -204,27 +178,14 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>330</y>
+     <x>40</x>
+     <y>310</y>
      <width>161</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>Output Folder</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_3">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>360</y>
-     <width>161</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Start</string>
    </property>
   </widget>
  </widget>
