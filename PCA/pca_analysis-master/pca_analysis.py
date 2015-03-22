@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-
-#
-# Thomas Coudrat <thomas.coudrat@gmail.com>
-# Janurary 2015
-#
-
 from __future__ import unicode_literals, print_function
 import pandas as pd
 import matplotlib.pyplot as plt

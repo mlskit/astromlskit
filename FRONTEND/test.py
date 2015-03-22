@@ -9,7 +9,8 @@ import numpy as np
 from idleint import *
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
-import naiveui
+####################################### all the algorithm files###################################################
+import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend
 
 #######################################################################################################
 class Binomial():
@@ -493,6 +494,8 @@ class Example(QtGui.QWidget):
         else:
             self.setWindowTitle('')
 #########################################################################################################
+####   classes for each format                                          ########
+################################################################################
 class nbmain(QtGui.QMainWindow):
         def __init__(self):
                 super(nbmain, self).__init__()
@@ -500,7 +503,48 @@ class nbmain(QtGui.QMainWindow):
                 self.ui = naiveui.Ui_Form()
                 self.ui.setupUi(self)
 
+class knnmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(knnmain, self).__init__()
+
+                self.ui = knnfront.Ui_Form()
+                self.ui.setupUi(self)
+                
+class dtreemain(QtGui.QMainWindow):
+        def __init__(self):
+                super(dtreemain, self).__init__()
+
+                self.ui = dtreefront.Ui_Form()
+                self.ui.setupUi(self)
+class forestmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(forestmain, self).__init__()
+
+                self.ui = forestfront.Ui_RandomForest()
+                self.ui.setupUi(self)
+
+
+############################################################################################################################################
+################### Cluster UI mains ##########################################################################################################
 ################################################################################################################################################
+class kmeansmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(kmeansmain, self).__init__()
+
+                self.ui = kmnfront.Ui_Form()
+                self.ui.setupUi(self)
+
+class hmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(hmain, self).__init__()
+
+                self.ui = heirarfrontend.Ui_Form()
+                self.ui.setupUi(self)
+
+
+############################################################################################################################################
+
+                
 class App(QtGui.QMainWindow):
     
     def __init__(self):
@@ -531,23 +575,49 @@ class App(QtGui.QMainWindow):
         pass
 
     def fnb(self):
-        self.w2=nbmain()
-        self.w2.show()
+        self.w1=nbmain()
+        self.w1.show()
         
 
 
     def fknn(self):
-        pass
+        self.w2=knnmain()
+        self.w2.show()
+        
 
     def fdtree(self):
-        pass
+        self.w3=dtreemain()
+        self.w3.show()
+        
 
     def fforest(self):
-        pass
+        self.w4=forestmain()
+        self.w4.show()
+        
     def flda(self):
         pass
 
     def flrl(self):
+        pass
+    def fsvm(self):
+        pass
+    def fann(self):
+        pass
+    def fkmeans(self):
+        self.w9=kmeansmain()
+        self.w9.show()    
+        
+    def fdbscna(self):
+        pass
+    def fhierarchy(self):
+        self.w11=hmain()
+        print "showing\n"
+        self.w11.show()
+    def fgmm(self):
+        pass
+    def fpca(self):
+        pass
+    def fgsa(self):
         pass
 
 
@@ -570,24 +640,27 @@ class App(QtGui.QMainWindow):
         fileMenu.addAction('Random Forest',self.fforest)
         fileMenu.addAction('LDA classifier',self.flda)
         fileMenu.addAction('Logistic regression learner',self.flrl)
-        
-        
+        fileMenu.addAction('SVM',self.fsvm)
+        fileMenu.addAction('A-Neural-nets',self.fann)
         
 
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('Regression and Anova')
-        fileMenu.addAction('Regression',self.Scat)
-        fileMenu.addAction('Mixed effect',self.Scat)
-        fileMenu.addAction('Anova',self.Scat)
+        fileMenu = menubar.addMenu('Regression')
+        fileMenu.addAction('Linear Regression',self.Scat)
+        fileMenu.addAction('Multiple Regression',self.Scat)
+        fileMenu.addAction('Lasso',self.Scat)
+        fileMenu.addAction('Ridge',self.Scat)
+
 
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('Machine learning')
-        fileMenu1 = fileMenu.addMenu('Dumb')
-        fileMenu1.addAction('classification',self.testme)
-        fileMenu1.addAction('cluster Analysis',self.Scat)        
-        fileMenu1.addAction('feature selection',self.Scat)
-        fileMenu1.addAction('Kmeans',self.kmn)
-        fileMenu1.addAction('KNN',self.knn)
+        fileMenu1 = menubar.addMenu('Unsupervised Clustering')
+        #fileMenu1 = fileMenu.addMenu('Dumb')
+        fileMenu1.addAction('K-Means',self.fkmeans)
+        fileMenu1.addAction('Dbscan',self.Scat)        
+        fileMenu1.addAction('Hierarchial',self.fhierarchy)
+        fileMenu1.addAction('Gausiann Mixture',self.Scat)
+        fileMenu1.addAction('PCA',self.Scat)
+        fileMenu1.addAction('Gravitational clustering',self.Scat)
     
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Visualisation')
