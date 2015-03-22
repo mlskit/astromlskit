@@ -13,6 +13,7 @@ import cPickle as pickle
 import random
 import re
 import unittest
+from collections import defaultdict
 
 VERSION = (0, 2, 3)
 __version__ = '.'.join(map(str, VERSION))
@@ -1739,6 +1740,7 @@ class Test(unittest.TestCase):
         self.assertAlmostEqual(result.mean, 1.0, 5)
         
         t = Tree.build(Data('cdata2'))
+        print "lalalalaalalalallalalaalal"
         pprint(t.to_dict(), indent=4)
         result = t.test(Data('cdata2'))
         print 'Accuracy:',result.mean
@@ -2033,5 +2035,5 @@ class Test(unittest.TestCase):
         self.assertEqual(e23, 0.5)
 
 if __name__ == '__main__':
-    unittest.main()
-    
+    tt=Test()
+    Test.test_batch_tree()
