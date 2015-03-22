@@ -311,6 +311,11 @@
       <string>rbf</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>linear</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QPushButton" name="pushButton">
