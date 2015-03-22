@@ -1,6 +1,3 @@
-
-
-
 import pylab as pl
 import numpy as np
 from scipy import linalg as la
@@ -11,7 +8,7 @@ def lda(data,labels,redDim):
     data -= data.mean(axis=0)
     nData = np.shape(data)[0]
     nDim = np.shape(data)[1]
-    print nData,nDim
+    #print nData,nDim
     
     Sw = np.zeros((nDim,nDim))
     Sb = np.zeros((nDim,nDim))
@@ -39,20 +36,10 @@ def lda(data,labels,redDim):
     newData = np.dot(data,w)
     return newData,w
 
-##data = np.array([[0.1,0.1,0.1],[0.2,0.2,0.2],[0.3,0.3,0.3],[0.35,0.3,0.35],[0.4,0.4,0.4],[0.6,0.4,0.6],[0.7,0.45,0.65],[0.75,0.4,0.7],[0.8,0.35,0.5]])
-##print data
-##labels = np.array([0,0,0,0,0,1,1,1,1])
-##newData,w = lda(data,labels,1)
-##print w
-##print "new data"
-##print newData
-##
-##pl.plot(data[:,0],data[:,1],'*',newData[:,0],'^')
-##pl.show()
 
-data = np.array([[0.1,0.1],[0.2,0.2],[0.3,0.3],[0.35,0.3],[0.4,0.4],[0.6,0.4],[0.7,0.45],[0.75,0.4],[0.8,0.35]])
-labels = np.array([0,0,0,0,0,1,1,1,1])
-newData,w = lda(data,labels,2)
-print w
-pl.plot(data[:,0],data[:,1],'o',newData[:,0],newData[:,0],'.')
-pl.show()
+##data = np.array([[0.1,0.1],[0.2,0.2],[0.3,0.3],[0.35,0.3],[0.4,0.4],[0.6,0.4],[0.7,0.45],[0.75,0.4],[0.8,0.35]])
+##labels = np.array([0,0,0,0,0,1,1,1,1])
+##newData,w = lda(data,labels,2)
+##print newData,w
+##pl.plot(data[:,0],data[:,1],'o',newData[:,0],newData[:,0],'.')
+##pl.show()

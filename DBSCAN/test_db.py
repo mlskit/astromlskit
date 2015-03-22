@@ -1,7 +1,7 @@
 import ddbscan
 
 # Create a DDBSCAN model with eps = 2 and min_pts = 5
-scan = ddbscan.DDBSCAN(2, 5)
+scan = ddbscan.DDBSCAN(2, 2)
 
 # Add points to model
 data = [[1,  100], [2,  2], [1,  3], [2, 3], [3, 3], [8, 9],
