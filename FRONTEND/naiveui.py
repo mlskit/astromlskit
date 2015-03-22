@@ -151,11 +151,3 @@ class Ui_Form(object):
             
         print "----Done------"
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    Dialog = QtGui.QDialog()
-    ui = Ui_Form()
-    ui.setupUi(Dialog)
-    Dialog.show()
-    sys.exit(app.exec_())

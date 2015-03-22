@@ -9,6 +9,7 @@ import numpy as np
 from idleint import *
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
+import naiveui
 
 #######################################################################################################
 class Binomial():
@@ -491,6 +492,13 @@ class Example(QtGui.QWidget):
             self.setWindowTitle('QtGui.QCheckBox')
         else:
             self.setWindowTitle('')
+#########################################################################################################
+class nbmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(nbmain, self).__init__()
+
+                self.ui = naiveui.Ui_Form()
+                self.ui.setupUi(self)
 
 ################################################################################################################################################
 class App(QtGui.QMainWindow):
@@ -521,6 +529,28 @@ class App(QtGui.QMainWindow):
         self.w.show()
     def knn(self):
         pass
+
+    def fnb(self):
+        self.w2=nbmain()
+        self.w2.show()
+        
+
+
+    def fknn(self):
+        pass
+
+    def fdtree(self):
+        pass
+
+    def fforest(self):
+        pass
+    def flda(self):
+        pass
+
+    def flrl(self):
+        pass
+
+
     
     def initUI(self):               
 
@@ -533,8 +563,15 @@ class App(QtGui.QMainWindow):
 
         
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&EDA')
-        fileMenu.addAction('Scatter Plot',self.Scat)
+        fileMenu = menubar.addMenu('&Classification')
+        fileMenu.addAction('Naive Bayes',self.fnb)
+        fileMenu.addAction('K- Nearest Neighbors',self.fknn)
+        fileMenu.addAction('Decision tree',self.fdtree)
+        fileMenu.addAction('Random Forest',self.fforest)
+        fileMenu.addAction('LDA classifier',self.flda)
+        fileMenu.addAction('Logistic regression learner',self.flrl)
+        
+        
         
 
         menubar = self.menuBar()
