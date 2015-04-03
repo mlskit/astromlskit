@@ -1406,11 +1406,36 @@ class App(QtGui.QMainWindow):
         self.layout = QVBoxLayout(self)
         self.show()        
 
-def main():
+def splashscreen(app):
+    import sys,time
+    splash_pix = QPixmap('conti1.png')
+    splash = QSplashScreen(splash_pix)
+    progressBar = QProgressBar(splash)
+    progressBar.setGeometry(splash.width()*0.2, splash.height()*0.95,splash.width()*0.8, splash.height()/25.0)
+
+    splash.setMask(splash_pix.mask())
+
+
+    splash.show()
+    for i in range(0, 101):
+        progressBar.setValue(i)
+        t = time.time()
+        while time.time() < t + 0.3:
+           app.processEvents()
 
     
+
+    # Simulate something that takes time
+    time.sleep(5)
+    
+def main():
+    import sys,time
+    
     app = QtGui.QApplication(sys.argv)
+    splashscreen(app)
+    
     ex = App()
+    #splash.finish(App)
     sys.exit(app.exec_())
 
 
