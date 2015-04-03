@@ -7,6 +7,7 @@ from numpy import *
 from math import *
 import numpy as np
 from idleint import *
+from ext import *
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
 ####################################### all the algorithm files###################################################
@@ -206,7 +207,12 @@ class Main(QtGui.QMainWindow):
         dtAction.setStatusTip("Insert current date/time")
         dtAction.setShortcut("Ctrl+D")
         dtAction.triggered.connect(self.DateTime)
- 
+		
+        wordCountAction = QtGui.QAction(QtGui.QIcon("icons/count.png"),"See word/symbol count",self)
+        wordCountAction.setStatusTip("See word/symbol count")
+        wordCountAction.setShortcut("Ctrl+W")
+        wordCountAction.triggered.connect(self.wordCount)
+         
         printAction = QtGui.QAction(QtGui.QIcon("icons/print.png"),"Print document",self)
         printAction.setStatusTip("Print document")
         printAction.setShortcut("Ctrl+P")
@@ -230,6 +236,7 @@ class Main(QtGui.QMainWindow):
         self.toolbar.addSeparator()
         self.toolbar.addAction(dtAction)
         self.toolbar.addSeparator()
+        self.toolbar.addAction(wordCountAction)
  
         self.addToolBarBreak()
  
@@ -257,16 +264,16 @@ class Main(QtGui.QMainWindow):
         italicAction = QtGui.QAction(QtGui.QIcon("icons/italic.png"),"Italic",self)
         italicAction.triggered.connect(self.Italic)
          
-        underlAction = QtGui.QAction(QtGui.QIcon("icons/underl.png"),"Underline",self)
+        underlAction = QtGui.QAction(QtGui.QIcon("icons/underline.png"),"Underline",self)
         underlAction.triggered.connect(self.Underl)
  
-        alignLeft = QtGui.QAction(QtGui.QIcon("icons/alignLeft.png"),"Align left",self)
+        alignLeft = QtGui.QAction(QtGui.QIcon("icons/alignleft.png"),"Align left",self)
         alignLeft.triggered.connect(self.alignLeft)
  
-        alignCenter = QtGui.QAction(QtGui.QIcon("icons/alignCenter.png"),"Align center",self)
+        alignCenter = QtGui.QAction(QtGui.QIcon("icons/aligncentre.png"),"Align center",self)
         alignCenter.triggered.connect(self.alignCenter)
  
-        alignRight = QtGui.QAction(QtGui.QIcon("icons/alignRight.png"),"Align right",self)
+        alignRight = QtGui.QAction(QtGui.QIcon("icons/alignright.png"),"Align right",self)
         alignRight.triggered.connect(self.alignRight)
  
         alignJustify = QtGui.QAction(QtGui.QIcon("icons/alignJustify.png"),"Align justify",self)
@@ -522,6 +529,11 @@ class Main(QtGui.QMainWindow):
         col = self.text.textCursor().columnNumber()
         linecol = ("Line: "+str(line)+" | "+"Column: "+str(col))
         self.status.showMessage(linecol)
+	
+    def wordCount(self):
+        wc = wordcount.WordCount(self)
+        wc.getText()
+        wc.show()
  
     def FontFamily(self,font):
         font = QtGui.QFont(self.fontFamily.currentFont())
