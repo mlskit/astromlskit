@@ -1309,11 +1309,13 @@ class App(QtGui.QMainWindow):
     def editdisp(self):
         self.main= editormain()
         self.main.show()
+    
     def gitcall(self):
         import subprocess
-        subprocess.call(['C:\\Program Files (x86)\\Git\\bin\\wish.exe','C:\\Program Files (x86)\\Git\\libexec\\git-core\\git-gui'])
-        
- 
+        subprocess.Popen(['C:\\Program Files (x86)\\Git\\bin\\wish.exe','C:\\Program Files (x86)\\Git\\libexec\\git-core\\git-gui'])
+    def browsecall(self):
+        import subprocess
+        subprocess.Popen(['C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'])
     
     def initUI(self):               
 
@@ -1381,7 +1383,7 @@ class App(QtGui.QMainWindow):
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Extra-Features')
         fileMenu.addAction('Editor',self.editdisp)
-        fileMenu.addAction('Browser',self.testme)
+        fileMenu.addAction('Browser',self.browsecall)
         fileMenu.addAction('Git',self.gitcall)
         fileMenu.addAction('G-Drive',self.testme)
         
