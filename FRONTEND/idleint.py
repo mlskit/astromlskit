@@ -59,8 +59,8 @@ class PyInterp(QTextEdit):
 
         # setting the color for bg and text
         palette = QPalette()
-        palette.setColor(QPalette.Base, QColor(0, 10, 0))
-        palette.setColor(QPalette.Text, QColor(0, 255, 0))
+        palette.setColor(QPalette.Base, QColor(255,255,255))
+        palette.setColor(QPalette.Text, QColor(0, 10, 0))
         self.setPalette(palette)
         self.setFont(QFont('Courier', 12))
 

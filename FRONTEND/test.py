@@ -10,14 +10,13 @@ from idleint import *
 from ext import *
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
+import warnings
+warnings.filterwarnings("ignore")
+#from mac import *
 ####################################### all the algorithm files###################################################
-import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront
+import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront
 #######################################################################################################
 ##### a simple editor #########################
-
-
-
-
 import sys
 import time
 from PyQt4 import QtGui, QtCore
@@ -1169,7 +1168,7 @@ class Example(QtGui.QWidget):
         cb.move(20, 20)
         cb.toggle()
         cb.stateChanged.connect(self.changeTitle)
-        
+        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
         self.setGeometry(300, 300, 250, 150)
         self.setWindowTitle('QtGui.QCheckBox')
         self.show()
@@ -1186,33 +1185,33 @@ class Example(QtGui.QWidget):
 class nbmain(QtGui.QMainWindow):
         def __init__(self):
                 super(nbmain, self).__init__()
-
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = naiveui.Ui_Form()
                 self.ui.setupUi(self)
 
 class knnmain(QtGui.QMainWindow):
         def __init__(self):
                 super(knnmain, self).__init__()
-
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = knnfront.Ui_Form()
                 self.ui.setupUi(self)
                 
 class dtreemain(QtGui.QMainWindow):
         def __init__(self):
                 super(dtreemain, self).__init__()
-
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = dtreefront.Ui_Form()
                 self.ui.setupUi(self)
 class forestmain(QtGui.QMainWindow):
         def __init__(self):
                 super(forestmain, self).__init__()
-
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = forestfront.Ui_RandomForest()
                 self.ui.setupUi(self)
 class svmmain(QtGui.QMainWindow):
         def __init__(self):
                 super(svmmain, self).__init__()
-
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = svmfront.Ui_Form()
                 self.ui.setupUi(self)
 
@@ -1223,14 +1222,14 @@ class svmmain(QtGui.QMainWindow):
 class kmeansmain(QtGui.QMainWindow):
         def __init__(self):
                 super(kmeansmain, self).__init__()
-
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = kmnfront.Ui_Form()
                 self.ui.setupUi(self)
 
 class hmain(QtGui.QMainWindow):
         def __init__(self):
                 super(hmain, self).__init__()
-
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = heirarfrontend.Ui_Form()
                 self.ui.setupUi(self)
 class editormain(QtGui.QMainWindow):
@@ -1238,10 +1237,45 @@ class editormain(QtGui.QMainWindow):
                 super(editormain, self).__init__()
 
                 self.ui = Main()
-                
 
+###########################################################################################################################################
+############################ Regressions Main Classes for UI ##############################################################################
 ############################################################################################################################################
+class linearmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(linearmain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = linearfront.Ui_SimpleLinear()
+                self.ui.setupUi(self)
 
+class mlinearmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(mlinearmain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = mlinearfront.Ui_Form()
+                self.ui.setupUi(self)
+
+
+class ridgemain(QtGui.QMainWindow):
+        def __init__(self):
+                super(ridgemain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = ridgefront.Ui_Ridge()
+                self.ui.setupUi(self)
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############################################################################################################################
                 
 class App(QtGui.QMainWindow):
     
@@ -1249,6 +1283,8 @@ class App(QtGui.QMainWindow):
         super(App, self).__init__()
         self.win = MyInterpreter(None)
         self.setCentralWidget(self.win)
+        #self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint) 
         self.initUI()
 
     def scatter(self):
@@ -1317,6 +1353,16 @@ class App(QtGui.QMainWindow):
         pass
     def fgsa(self):
         pass
+    def flinear(self):
+        self.w15=linearmain()
+        self.w15.show()
+    def fmlinear(self):
+        self.w16=mlinearmain()
+        self.w16.show()
+    def fridge(self):
+        self.w17=ridgemain()
+        self.w17.show()
+        
 
     def editdisp(self):
         self.main= editormain()
@@ -1353,10 +1399,12 @@ class App(QtGui.QMainWindow):
 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Regression')
-        fileMenu.addAction('Linear Regression',self.Scat)
-        fileMenu.addAction('Multiple Regression',self.Scat)
+        fileMenu.addAction('Linear Regression',self.flinear)
+        fileMenu.addAction('Multiple Regression',self.fmlinear)
         fileMenu.addAction('Lasso',self.Scat)
-        fileMenu.addAction('Ridge',self.Scat)
+        fileMenu.addAction('Ridge',self.fridge)
+        fileMenu.addAction('Curvilinear',self.Scat)
+        
 
 
         menubar = self.menuBar()
@@ -1376,22 +1424,51 @@ class App(QtGui.QMainWindow):
         fileMenu.addAction('Biplots',self.testme)
         fileMenu.addAction('Andrew Plots',self.testme)
         fileMenu.addAction('Glyph Plots',self.testme)
+        fileMenu.addAction('Heat Maps',self.testme)
+        fileMenu.addAction('Radviz',self.testme)
+        fileMenu.addAction('polyviz',self.testme)
+        fileMenu.addAction('Sieve Multigram',self.testme)
         
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('Goodness Fit')
-        fileMenu.addAction('Chi-square',self.testme)
+        fileMenu = menubar.addMenu('Evaluation Metrics')
+        fileMenu.addAction('Confusion matrix',self.testme)
+        fileMenu.addAction('ROC analysis',self.testme)
+        fileMenu.addAction('Calibration plot',self.testme)
+        fileMenu.addAction('Test Learners',self.testme)
         
+        
+         
+       
+        
+        
+        
+##        menubar = self.menuBar()
+##        fileMenu = menubar.addMenu('Goodness Fit')
+##        fileMenu.addAction('Chi-square',self.testme)
+##        
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('DOE')
         fileMenu.addAction('Full factorial',self.testme)
         fileMenu.addAction('2-L-Fullfactorial',self.testme)
         fileMenu.addAction('Fractional factorial',self.testme)
         
-
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('Tests')
+        fileMenu.addAction('ANOVA',self.testme)
+        fileMenu.addAction('ARIMA',self.testme)
+        fileMenu.addAction('chi-2',self.testme)
+        fileMenu.addAction('P-test',self.testme)
+        
+        
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Distribution')
         fileMenu.addAction('All-in-one',self.dist)
 
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('Markov Sampling')
+        fileMenu.addAction('Metropolis Hastings',self.testme)
+        fileMenu.addAction('Slice Sampling',self.testme)
+        
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Extra-Features')
         fileMenu.addAction('Editor',self.editdisp)
@@ -1400,8 +1477,9 @@ class App(QtGui.QMainWindow):
         fileMenu.addAction('G-Drive',self.testme)
         
         
-        self.setGeometry(100, 100, 700, 600)
-        self.setWindowTitle('Statistical Toolkit v1.0')
+        #self.setGeometry(100, 100, 700, 600)
+        self.showMaximized()
+        self.setWindowTitle('MLSKit V 1.0')
 
         self.layout = QVBoxLayout(self)
         self.show()        
@@ -1420,10 +1498,8 @@ def splashscreen(app):
     for i in range(0, 101):
         progressBar.setValue(i)
         t = time.time()
-        while time.time() < t + 0.3:
+        while time.time() < t + 0.1:
            app.processEvents()
-
-    
 
     # Simulate something that takes time
     time.sleep(5)
@@ -1433,7 +1509,7 @@ def main():
     
     app = QtGui.QApplication(sys.argv)
     splashscreen(app)
-    
+    app.setStyle('plastique')
     ex = App()
     #splash.finish(App)
     sys.exit(app.exec_())

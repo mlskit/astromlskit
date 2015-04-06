@@ -12,8 +12,11 @@ def main():
     """
 
     # Collect arguments
-    csvPath, rounded, proj3D, save_flag = parsing()
-
+    #csvPath, rounded, proj3D, save_flag = parsing()
+    csvPath="random_data.csv"
+    save_flag=False
+    rounded=0
+    proj3D=True
     # Prepare the data table
     df = pd.read_csv(filepath_or_buffer=csvPath, index_col=0, sep=",")
     colors = df.color.values

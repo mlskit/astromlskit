@@ -1,7 +1,3 @@
-"""
-Author: Ali Hajimirza (ali@alihm.net)
-Copyright Ali Hajimirza, free for use under MIT license.
-"""
 import numpy as np
 
 # Exponent function for estimating e

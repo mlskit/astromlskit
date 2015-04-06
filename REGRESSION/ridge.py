@@ -3,6 +3,7 @@
  
 import numpy as np
 import matplotlib.pyplot as plt
+import random
  
  
 class RidgeRegressor(object):
@@ -64,21 +65,23 @@ class RidgeRegressor(object):
 if __name__ == '__main__':
     # Create synthetic data
     X = np.linspace(0, 6, 100)
-    y = 1 + 2 * np.sin(X)
-    yhat = y + .5 * np.random.normal(size=len(X))
+    y=np.random.normal(size=len(X))/random.randint(1,1000)
+    #yhat = y + .5 * np.random.normal(size=len(X))
  
     # Plot synthetic data
     plt.plot(X, y, 'g', label='y = 1 + 2 * sin(x)')
-    plt.plot(X, yhat, 'rx', label='noisy samples')
+    #plt.plot(X, yhat, 'rx', label='noisy samples')
  
     # Create feature matrix
     tX = np.array([X]).T
-    tX = np.hstack((tX, np.power(tX, 2), np.power(tX, 3)))
+    print tX
+    #tX = np.hstack((tX, np.power(tX, 2), np.power(tX, 3)))
+    print tX
  
     # Plot regressors
     r = RidgeRegressor()
     r.fit(tX, y)
-    plt.plot(X, r.predict(tX), 'b', label=u'ŷ (alpha=0.0)')
+    #plt.plot(X, r.predict(tX), 'b', label=u'ŷ (alpha=0.0)')
     alpha = 3.0
     r.fit(tX, y, alpha)
     plt.plot(X, r.predict(tX), 'y', label=u'ŷ (alpha=%.1f)' % alpha)

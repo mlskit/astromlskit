@@ -1,7 +1,4 @@
-"""
-Author: Ali Hajimirza (ali@alihm.net)
-Copyright Ali Hajimirza, free for use under MIT license.
-"""
+
 import csv
 import os
 import sys
@@ -46,13 +43,13 @@ def line_plot(data_arrays, xlabel, ylabel, labels, title, f):
     plt.savefig(f, format="png")
     plt.clf()
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Divides data into the categories by ')
     parser.add_argument('data', type=argparse.FileType("rb"), help='CSV file of data input')
     args = parser.parse_args()
     # reading the file
     with args.data as csvfile:
+        print csvfile
         reader = csv.reader(csvfile)
         input_list = np.array(map(lambda line: np.array(map(lambda i: float(i), line)), reader))
 
