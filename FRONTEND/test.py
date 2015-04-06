@@ -1,22 +1,25 @@
 import sys
 from PyQt4 import QtGui,QtCore
-#import kmeans
 import pyqtgraph as pg
+
 import random
 from numpy import *
 from math import *
 import numpy as np
+
 from idleint import *
-from ext import *
+import find
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
+
 import warnings
 warnings.filterwarnings("ignore")
-#from mac import *
+
 ####################################### all the algorithm files#######################################################################################
 import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront,logisticfront,dbscanfront,gmmfront##lassofront
-import annfront
+import annfront,ldafront,pcafront
 #######################################################################################################################################################
+
 ##### a simple editor #########################
 import sys
 import time
@@ -677,24 +680,6 @@ class Main(QtGui.QMainWindow):
 ###############################################################
         ###########ditributions#########################################################
 ############################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class Binomial():
 
 	def __init__(self):
@@ -1153,7 +1138,7 @@ class KmeansG(QtGui.QWidget):
         km.kCluster()
         km.showMembers()
         #exit(0)
-################################################################################################################################################
+#################################################################################
 
 #DummY test code
 class Example(QtGui.QWidget):
@@ -1180,7 +1165,7 @@ class Example(QtGui.QWidget):
             self.setWindowTitle('QtGui.QCheckBox')
         else:
             self.setWindowTitle('')
-#########################################################################################################
+################################################################################
 ####   classes for each format                                          ########
 ################################################################################
 class nbmain(QtGui.QMainWindow):
@@ -1188,6 +1173,13 @@ class nbmain(QtGui.QMainWindow):
                 super(nbmain, self).__init__()
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = naiveui.Ui_Form()
+                self.ui.setupUi(self)
+                
+class pcamain(QtGui.QMainWindow):
+        def __init__(self):
+                super(pcamain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = pcafront.Ui_Form()
                 self.ui.setupUi(self)
 
 class knnmain(QtGui.QMainWindow):
@@ -1203,35 +1195,45 @@ class dtreemain(QtGui.QMainWindow):
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = dtreefront.Ui_Form()
                 self.ui.setupUi(self)
+                
 class forestmain(QtGui.QMainWindow):
         def __init__(self):
                 super(forestmain, self).__init__()
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = forestfront.Ui_RandomForest()
                 self.ui.setupUi(self)
+                
 class svmmain(QtGui.QMainWindow):
         def __init__(self):
                 super(svmmain, self).__init__()
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = svmfront.Ui_Form()
                 self.ui.setupUi(self)
+                
 class lrlmain(QtGui.QMainWindow):
         def __init__(self):
                 super(lrlmain, self).__init__()
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = logisticfront.Ui_Form()
                 self.ui.setupUi(self)
+                
 class annmain(QtGui.QMainWindow):
         def __init__(self):
                 super(annmain, self).__init__()
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = annfront.Ui_ANN()
                 self.ui.setupUi(self)
+class ldamain(QtGui.QMainWindow):
+        def __init__(self):
+                super(ldamain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = ldafront.Ui_Form()
+                self.ui.setupUi(self)
 
-
-############################################################################################################################################
-################### Cluster UI mains ##########################################################################################################
-################################################################################################################################################
+##################################################################################################
+################### Cluster UI mains #############################################################
+##################################################################################################
+                
 class kmeansmain(QtGui.QMainWindow):
         def __init__(self):
                 super(kmeansmain, self).__init__()
@@ -1263,12 +1265,12 @@ class gmmmain(QtGui.QMainWindow):
 class editormain(QtGui.QMainWindow):
         def __init__(self):
                 super(editormain, self).__init__()
-
                 self.ui = Main()
 
-###########################################################################################################################################
-############################ Regressions Main Classes for UI ##############################################################################
-############################################################################################################################################
+############################################################################################
+############################ Regressions Main Classes for UI ###############################
+############################################################################################
+                
 class linearmain(QtGui.QMainWindow):
         def __init__(self):
                 super(linearmain, self).__init__()
@@ -1297,6 +1299,8 @@ class lassomain(QtGui.QMainWindow):
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = lassofront.Ui_Form()
                 self.ui.setupUi(self)
+
+
 ##############################################################################################################################
 ######################   main function class #################################################################################
 ##############################################################################################################################
@@ -1347,7 +1351,8 @@ class App(QtGui.QMainWindow):
         self.w4.show()
         
     def flda(self):
-        pass
+        self.w51=ldamain()
+        self.w51.show()
 
     def flrl(self):
         self.w17=lrlmain()
@@ -1378,7 +1383,8 @@ class App(QtGui.QMainWindow):
         self.w20.show()
         
     def fpca(self):
-        pass
+        self.w211=pcamain()
+        self.w211.show()
 
     def fgsa(self):
         pass
@@ -1451,7 +1457,7 @@ class App(QtGui.QMainWindow):
         fileMenu1.addAction('Dbscan',self.fdb)        
         fileMenu1.addAction('Hierarchial',self.fhierarchy)
         fileMenu1.addAction('Gausiann Mixture',self.fgmm)
-        fileMenu1.addAction('PCA',self.Scat)
+        fileMenu1.addAction('PCA',self.fpca)
         fileMenu1.addAction('Gravitational clustering',self.Scat)
     
         menubar = self.menuBar()
