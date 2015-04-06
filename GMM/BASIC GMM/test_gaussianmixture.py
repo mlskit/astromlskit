@@ -3,6 +3,7 @@ import gaussianmixture
 
 def _sq(x):
     return x*x
+
 def test_gm():
     j= np.random.seed()
     print j

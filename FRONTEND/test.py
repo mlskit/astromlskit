@@ -13,9 +13,10 @@ from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as Naviga
 import warnings
 warnings.filterwarnings("ignore")
 #from mac import *
-####################################### all the algorithm files###################################################
-import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront
-#######################################################################################################
+####################################### all the algorithm files#######################################################################################
+import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront,logisticfront,dbscanfront,gmmfront##lassofront
+import annfront
+#######################################################################################################################################################
 ##### a simple editor #########################
 import sys
 import time
@@ -1214,6 +1215,18 @@ class svmmain(QtGui.QMainWindow):
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = svmfront.Ui_Form()
                 self.ui.setupUi(self)
+class lrlmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(lrlmain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = logisticfront.Ui_Form()
+                self.ui.setupUi(self)
+class annmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(annmain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = annfront.Ui_ANN()
+                self.ui.setupUi(self)
 
 
 ############################################################################################################################################
@@ -1232,6 +1245,21 @@ class hmain(QtGui.QMainWindow):
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = heirarfrontend.Ui_Form()
                 self.ui.setupUi(self)
+
+class dbmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(dbmain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = dbscanfront.Ui_Form()
+                self.ui.setupUi(self)
+class gmmmain(QtGui.QMainWindow):
+        def __init__(self):
+                super(gmmmain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = gmmfront.Ui_Form()
+                self.ui.setupUi(self)
+
+
 class editormain(QtGui.QMainWindow):
         def __init__(self):
                 super(editormain, self).__init__()
@@ -1262,19 +1290,15 @@ class ridgemain(QtGui.QMainWindow):
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = ridgefront.Ui_Ridge()
                 self.ui.setupUi(self)
-
-
-
-
-
-
-
-
-
-
-
-
-
+                
+class lassomain(QtGui.QMainWindow):
+        def __init__(self):
+                super(lassomain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = lassofront.Ui_Form()
+                self.ui.setupUi(self)
+##############################################################################################################################
+######################   main function class #################################################################################
 ##############################################################################################################################
                 
 class App(QtGui.QMainWindow):
@@ -1310,18 +1334,14 @@ class App(QtGui.QMainWindow):
         self.w1=nbmain()
         self.w1.show()
         
-
-
     def fknn(self):
         self.w2=knnmain()
         self.w2.show()
         
-
     def fdtree(self):
         self.w3=dtreemain()
         self.w3.show()
         
-
     def fforest(self):
         self.w4=forestmain()
         self.w4.show()
@@ -1330,40 +1350,59 @@ class App(QtGui.QMainWindow):
         pass
 
     def flrl(self):
-        pass
+        self.w17=lrlmain()
+        self.w17.show()
+
     def fsvm(self):
         self.w7=svmmain()
         self.w7.show()    
         
     def fann(self):
-        pass
+        self.w8=annmain()
+        self.w8.show()
+
     def fkmeans(self):
         self.w9=kmeansmain()
         self.w9.show()    
         
     def fdbscna(self):
         pass
+
     def fhierarchy(self):
         self.w11=hmain()
         print "showing\n"
         self.w11.show()
+        
     def fgmm(self):
-        pass
+        self.w20=gmmmain()
+        self.w20.show()
+        
     def fpca(self):
         pass
+
     def fgsa(self):
         pass
+
     def flinear(self):
         self.w15=linearmain()
         self.w15.show()
+
     def fmlinear(self):
         self.w16=mlinearmain()
         self.w16.show()
+
     def fridge(self):
         self.w17=ridgemain()
         self.w17.show()
-        
 
+    def flassso(self):
+        self.w18=lassomain()
+        self.w18.show()
+
+    def fdb(self):
+        self.w19=dbmain()
+        self.w19.show()
+        
     def editdisp(self):
         self.main= editormain()
         self.main.show()
@@ -1382,9 +1421,7 @@ class App(QtGui.QMainWindow):
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(QtGui.qApp.quit)
 
-        self.statusBar()
-
-        
+        self.statusBar()    
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&Classification')
         fileMenu.addAction('Naive Bayes',self.fnb)
@@ -1411,9 +1448,9 @@ class App(QtGui.QMainWindow):
         fileMenu1 = menubar.addMenu('Unsupervised Clustering')
         #fileMenu1 = fileMenu.addMenu('Dumb')
         fileMenu1.addAction('K-Means',self.fkmeans)
-        fileMenu1.addAction('Dbscan',self.Scat)        
+        fileMenu1.addAction('Dbscan',self.fdb)        
         fileMenu1.addAction('Hierarchial',self.fhierarchy)
-        fileMenu1.addAction('Gausiann Mixture',self.Scat)
+        fileMenu1.addAction('Gausiann Mixture',self.fgmm)
         fileMenu1.addAction('PCA',self.Scat)
         fileMenu1.addAction('Gravitational clustering',self.Scat)
     
@@ -1436,16 +1473,6 @@ class App(QtGui.QMainWindow):
         fileMenu.addAction('Calibration plot',self.testme)
         fileMenu.addAction('Test Learners',self.testme)
         
-        
-         
-       
-        
-        
-        
-##        menubar = self.menuBar()
-##        fileMenu = menubar.addMenu('Goodness Fit')
-##        fileMenu.addAction('Chi-square',self.testme)
-##        
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('DOE')
         fileMenu.addAction('Full factorial',self.testme)
@@ -1458,7 +1485,6 @@ class App(QtGui.QMainWindow):
         fileMenu.addAction('ARIMA',self.testme)
         fileMenu.addAction('chi-2',self.testme)
         fileMenu.addAction('P-test',self.testme)
-        
         
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Distribution')
@@ -1476,11 +1502,9 @@ class App(QtGui.QMainWindow):
         fileMenu.addAction('Git',self.gitcall)
         fileMenu.addAction('G-Drive',self.testme)
         
-        
         #self.setGeometry(100, 100, 700, 600)
         self.showMaximized()
         self.setWindowTitle('MLSKit V 1.0')
-
         self.layout = QVBoxLayout(self)
         self.show()        
 

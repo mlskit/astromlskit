@@ -54,6 +54,8 @@ if __name__ == '__main__':
         input_list = np.array(map(lambda line: np.array(map(lambda i: float(i), line)), reader))
 
     x_list = input_list[:,0]
+    print x_list
     e_matrix = input_list[:,1:]
+    print e_matrix
     mean_matrix = EM.simulate_E_M(x_list, e_matrix, 100)
     line_plot(mean_matrix, 'step', 'mean', ['Distribution 1','Distribution 2','Distribution 3'], 'E-M Learning' ,'sample_result.png' )
