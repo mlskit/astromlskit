@@ -18,6 +18,7 @@ warnings.filterwarnings("ignore")
 ####################################### all the algorithm files#######################################################################################
 import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront,logisticfront,dbscanfront,gmmfront##lassofront
 import annfront,ldafront,pcafront
+import doefront1,doefront2,doefront3
 #######################################################################################################################################################
 
 ##### a simple editor #########################
@@ -678,8 +679,8 @@ class Main(QtGui.QMainWindow):
 
 
 ###############################################################
-        ###########ditributions#########################################################
-############################################################################
+###########ditributions########################################
+###############################################################
 class Binomial():
 
 	def __init__(self):
@@ -1267,6 +1268,33 @@ class editormain(QtGui.QMainWindow):
                 super(editormain, self).__init__()
                 self.ui = Main()
 
+####################################################
+#######################DOE##########################
+####################################################
+
+class doefront1main(QtGui.QMainWindow):
+        def __init__(self):
+                super(doefront1main, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = doefront1.Ui_Form()
+                self.ui.setupUi(self)
+class doefront2main(QtGui.QMainWindow):
+        def __init__(self):
+                super(doefront2main, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = doefront2.Ui_Form()
+                self.ui.setupUi(self)
+class doefront3main(QtGui.QMainWindow):
+        def __init__(self):
+                super(doefront3main, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = doefront3.Ui_Form()
+                self.ui.setupUi(self)
+
+
+
+                
+
 ############################################################################################
 ############################ Regressions Main Classes for UI ###############################
 ############################################################################################
@@ -1412,6 +1440,16 @@ class App(QtGui.QMainWindow):
     def editdisp(self):
         self.main= editormain()
         self.main.show()
+    def ffront1(self):
+        self.w900=doefront1main()
+        self.w900.show()
+    def ffront2(self):
+        self.w901=doefront2main()
+        self.w901.show()
+    def ffront3(self):
+        self.w902=doefront3main()
+        self.w902.show()
+        
     
     def gitcall(self):
         import subprocess
@@ -1464,12 +1502,12 @@ class App(QtGui.QMainWindow):
         fileMenu = menubar.addMenu('Visualisation')
         fileMenu.addAction('Scatter Plots',self.scatter)
         fileMenu.addAction('Dendograms',self.testme)
-        fileMenu.addAction('Biplots',self.testme)
+        #fileMenu.addAction('Biplots',self.testme)
         fileMenu.addAction('Andrew Plots',self.testme)
-        fileMenu.addAction('Glyph Plots',self.testme)
+        #fileMenu.addAction('Glyph Plots',self.testme)
         fileMenu.addAction('Heat Maps',self.testme)
         fileMenu.addAction('Radviz',self.testme)
-        fileMenu.addAction('polyviz',self.testme)
+        #fileMenu.addAction('polyviz',self.testme)
         fileMenu.addAction('Sieve Multigram',self.testme)
         
         menubar = self.menuBar()
@@ -1481,9 +1519,9 @@ class App(QtGui.QMainWindow):
         
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('DOE')
-        fileMenu.addAction('Full factorial',self.testme)
-        fileMenu.addAction('2-L-Fullfactorial',self.testme)
-        fileMenu.addAction('Fractional factorial',self.testme)
+        fileMenu.addAction('Full factorial',self.ffront1)
+        fileMenu.addAction('2-L-Fullfactorial',self.ffront2)
+        fileMenu.addAction('Fractional factorial',self.ffront3)
         
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('Tests')
@@ -1528,11 +1566,11 @@ def splashscreen(app):
     for i in range(0, 101):
         progressBar.setValue(i)
         t = time.time()
-        while time.time() < t + 0.1:
+        while time.time() < t + 0:
            app.processEvents()
 
     # Simulate something that takes time
-    time.sleep(5)
+    time.sleep(1)
     
 def main():
     import sys,time

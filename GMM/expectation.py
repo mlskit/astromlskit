@@ -12,8 +12,6 @@ textbook "Foundations of Statistical Natural Language Processing",
 wrote by Christopher D. Manning & Hinrich Schütze. 
 [ISBN: 0-262-13360-1]
 
-Coded by WU, Zhaojun < wuzhaojun at gmail dot com>
-Tue Jul  1 22:11:14 HKT 2008
 
 Usage:
 
