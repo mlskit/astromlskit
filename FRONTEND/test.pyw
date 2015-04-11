@@ -19,6 +19,7 @@ warnings.filterwarnings("ignore")
 import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront,logisticfront,dbscanfront,gmmfront##lassofront
 import annfront,ldafront,pcafront
 import doefront1,doefront2,doefront3
+import lassofront,polynomialfront,anovafront
 #######################################################################################################################################################
 
 ##### a simple editor #########################
@@ -1327,7 +1328,21 @@ class lassomain(QtGui.QMainWindow):
                 self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
                 self.ui = lassofront.Ui_Form()
                 self.ui.setupUi(self)
-
+        
+        
+class polymain(QtGui.QMainWindow):
+        def __init__(self):
+                super(polymain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = polynomialfront.Ui_Form()
+                self.ui.setupUi(self)
+        
+class anovamain(QtGui.QMainWindow):
+        def __init__(self):
+                super(anovamain, self).__init__()
+                self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+                self.ui = anovafront.Ui_Form()
+                self.ui.setupUi(self)
 
 ##############################################################################################################################
 ######################   main function class #################################################################################
@@ -1351,10 +1366,12 @@ class App(QtGui.QMainWindow):
         print "Opening a new popup window..."
         self.w = DisPlot()
         self.w.show()
+        
     def testme(self):
         pass
     def Scat(self):
         pass
+    
     def kmn(self):
         print "Doing Kmeans  ...."
         self.w=KmeansG()
@@ -1401,10 +1418,19 @@ class App(QtGui.QMainWindow):
     def fdbscna(self):
         pass
 
+    def fpoly(self):
+        print "polymain"
+        self.w30=polymain()
+        self.w30.show()
+
     def fhierarchy(self):
         self.w11=hmain()
         print "showing\n"
         self.w11.show()
+
+    def fanova(self):
+        self.w333=anovamain()
+        self.w333.show()
         
     def fgmm(self):
         self.w20=gmmmain()
@@ -1429,7 +1455,7 @@ class App(QtGui.QMainWindow):
         self.w17=ridgemain()
         self.w17.show()
 
-    def flassso(self):
+    def flasso(self):
         self.w18=lassomain()
         self.w18.show()
 
@@ -1482,14 +1508,14 @@ class App(QtGui.QMainWindow):
         fileMenu = menubar.addMenu('Regression')
         fileMenu.addAction('Linear Regression',self.flinear)
         fileMenu.addAction('Multiple Regression',self.fmlinear)
-        fileMenu.addAction('Lasso',self.Scat)
+        fileMenu.addAction('Lasso',self.flasso)
         fileMenu.addAction('Ridge',self.fridge)
-        fileMenu.addAction('Curvilinear',self.Scat)
+        fileMenu.addAction('Curvilinear',self.fpoly)
         
 
 
         menubar = self.menuBar()
-        fileMenu1 = menubar.addMenu('Unsupervised Clustering')
+        fileMenu1 = menubar.addMenu('&Unsupervised Clustering')
         #fileMenu1 = fileMenu.addMenu('Dumb')
         fileMenu1.addAction('K-Means',self.fkmeans)
         fileMenu1.addAction('Dbscan',self.fdb)        
@@ -1499,7 +1525,7 @@ class App(QtGui.QMainWindow):
         fileMenu1.addAction('Gravitational clustering',self.Scat)
     
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('Visualisation')
+        fileMenu = menubar.addMenu('&Visualisation')
         fileMenu.addAction('Scatter Plots',self.scatter)
         fileMenu.addAction('Dendograms',self.testme)
         #fileMenu.addAction('Biplots',self.testme)
@@ -1511,21 +1537,21 @@ class App(QtGui.QMainWindow):
         fileMenu.addAction('Sieve Multigram',self.testme)
         
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('Evaluation Metrics')
+        fileMenu = menubar.addMenu('&Evaluation Metrics')
         fileMenu.addAction('Confusion matrix',self.testme)
         fileMenu.addAction('ROC analysis',self.testme)
         fileMenu.addAction('Calibration plot',self.testme)
         fileMenu.addAction('Test Learners',self.testme)
         
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('DOE')
+        fileMenu = menubar.addMenu('&DOE')
         fileMenu.addAction('Full factorial',self.ffront1)
         fileMenu.addAction('2-L-Fullfactorial',self.ffront2)
         fileMenu.addAction('Fractional factorial',self.ffront3)
         
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('Tests')
-        fileMenu.addAction('ANOVA',self.testme)
+        fileMenu = menubar.addMenu('&Tests')
+        fileMenu.addAction('ANOVA',self.fanova)
         fileMenu.addAction('ARIMA',self.testme)
         fileMenu.addAction('chi-2',self.testme)
         fileMenu.addAction('P-test',self.testme)
@@ -1553,24 +1579,24 @@ class App(QtGui.QMainWindow):
         self.show()        
 
 def splashscreen(app):
-    import sys,time
-    splash_pix = QPixmap('conti1.png')
-    splash = QSplashScreen(splash_pix)
-    progressBar = QProgressBar(splash)
-    progressBar.setGeometry(splash.width()*0.2, splash.height()*0.95,splash.width()*0.8, splash.height()/25.0)
+        import sys,time
+        splash_pix = QPixmap('conti1.png')
+        splash = QSplashScreen(splash_pix)
+        progressBar = QProgressBar(splash)
+        progressBar.setGeometry(splash.width()*0.2, splash.height()*0.95,splash.width()*0.8, splash.height()/25.0)
 
-    splash.setMask(splash_pix.mask())
+        splash.setMask(splash_pix.mask())
 
 
-    splash.show()
-    for i in range(0, 101):
-        progressBar.setValue(i)
-        t = time.time()
-        while time.time() < t + 0:
-           app.processEvents()
+        splash.show()
+        for i in range(0, 101):
+            progressBar.setValue(i)
+            t = time.time()
+            while time.time() < t + 0.1:
+               app.processEvents()
 
-    # Simulate something that takes time
-    time.sleep(1)
+        # Simulate something that takes time
+        time.sleep(1)
     
 def main():
     import sys,time

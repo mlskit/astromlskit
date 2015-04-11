@@ -66,20 +66,25 @@ class Ui_Form(object):
         self.checkBox_6 = QtGui.QCheckBox(self.groupBox_3)
         self.checkBox_6.setGeometry(QtCore.QRect(30, 20, 151, 21))
         self.checkBox_6.setObjectName(_fromUtf8("checkBox_6"))
-
+        self.checkBox_6.stateChanged.connect(self.checkprob1)
+       
         self.groupBox_4 = QtGui.QGroupBox(self.groupBox_3)
         self.groupBox_4.setGeometry(QtCore.QRect(0, 0, 211, 80))
         self.groupBox_4.setObjectName(_fromUtf8("groupBox_4"))
 
-        self.checkBox_7 = QtGui.QCheckBox(self.groupBox_4)
+        self.checkBox_7 = QtGui.QCheckBox(self.groupBox_3)
         self.checkBox_7.setGeometry(QtCore.QRect(30, 50, 151, 21))
         self.checkBox_7.setObjectName(_fromUtf8("checkBox_7"))
         self.checkBox_7.stateChanged.connect(self.checkprob)
-
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        
     def checkprob(self):
         
+        if self.pprob==False:
+            self.pprob=True
+    def checkprob1(self):
+        print "in check prob1"
         if self.pprob==False:
             self.pprob=True
 
@@ -94,9 +99,8 @@ class Ui_Form(object):
         self.pushButton.setText(_translate("Form", "Input Train", None))
         self.pushButton_2.setText(_translate("Form", "Input test", None))
         self.groupBox_3.setTitle(_translate("Form", "Options", None))
-        #self.checkBox_5.setText(_translate("Form", " Predict Probaibilty of (x)", None))
+        self.checkBox_6.setText(_translate("Form", " Predict Probaibilty of (x)", None))
         self.groupBox_4.setTitle(_translate("Form", "Options", None))
-        self.checkBox_6.setText(_translate("Form", " Predict Probaibilty (x)", None))
         self.checkBox_7.setText(_translate("Form", "Return Score", None))
         
     def getclassy(self,txt):
