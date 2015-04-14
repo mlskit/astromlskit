@@ -1,13 +1,6 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'linearfront.ui'
-#
-# Created: Mon Apr 06 08:37:32 2015
-#      by: PyQt4 UI code generator 4.10.4
-#
-# WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+from linear import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -36,12 +29,15 @@ class Ui_SimpleLinear(object):
         self.pushButton_3 = QtGui.QPushButton(SimpleLinear)
         self.pushButton_3.setGeometry(QtCore.QRect(30, 140, 161, 23))
         self.pushButton_3.setObjectName(_fromUtf8("pushButton_3"))
+        self.pushButton_3.clicked.connect(self.startlinear)
         self.pushButton_2 = QtGui.QPushButton(SimpleLinear)
         self.pushButton_2.setGeometry(QtCore.QRect(30, 110, 161, 23))
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+        self.pushButton_2.clicked.connect(self.takeoutput)
         self.pushButton = QtGui.QPushButton(SimpleLinear)
         self.pushButton.setGeometry(QtCore.QRect(30, 80, 161, 23))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.pushButton.clicked.connect(self.takeinput)
 
         self.retranslateUi(SimpleLinear)
         QtCore.QMetaObject.connectSlotsByName(SimpleLinear)
@@ -53,4 +49,32 @@ class Ui_SimpleLinear(object):
         self.pushButton_3.setText(_translate("SimpleLinear", "Start", None))
         self.pushButton_2.setText(_translate("SimpleLinear", "Y-File", None))
         self.pushButton.setText(_translate("SimpleLinear", "X-File", None))
+    def takeinput(self):
+        self.fname1 = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        
+    def takeoutput(self):
+        self.fname2 = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        
+    def startlinear(self):
+        print self.fname1
+        print self.fname2
+        x_array, y_array = load_data(self.fname1, self.fname2)
+
+        weights = regression(x_array, y_array)
+        print weights
+
+        x_matrix = file2matrix(self.fname1)
+        y_matrix = file2matrix(self.fname2)
+
+        plot_best_fit(weights, x_matrix, y_matrix)
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    Dialog = QtGui.QDialog()
+    ui = Ui_SimpleLinear()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
+
 

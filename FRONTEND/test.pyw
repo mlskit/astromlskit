@@ -16,7 +16,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 ####################################### all the algorithm files#######################################################################################
-import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront,logisticfront,dbscanfront,gmmfront##lassofront
+import naiveui,knnfront,dtreefront,forestfront,kmnfront,heirarfrontend,svmfront,linearfront,mlinearfront,ridgefront,logisticfront,dbscanfront,gmmfront
 import annfront,ldafront,pcafront
 import doefront1,doefront2,doefront3
 import lassofront,polynomialfront,anovafront
@@ -1490,11 +1490,19 @@ class App(QtGui.QMainWindow):
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(QtGui.qApp.quit)
+        #nbaction=QtGui.QAction(QtGui.QIcon('nb.png'),'Naive Bayes',self.fnb)
 
+        
         self.statusBar()    
+        cut = QtGui.QAction(QtGui.QIcon("icons/nb.png"),"Naive bayes",self)
+        cut.setStatusTip("Delete and copy text to clipboard")
+        cut.setShortcut("Ctrl+X")
+        cut.triggered.connect(self.fnb)
+
+
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&Classification')
-        fileMenu.addAction('Naive Bayes',self.fnb)
+        fileMenu.addAction(cut)
         fileMenu.addAction('K- Nearest Neighbors',self.fknn)
         fileMenu.addAction('Decision tree',self.fdtree)
         fileMenu.addAction('Random Forest',self.fforest)
@@ -1592,7 +1600,7 @@ def splashscreen(app):
         for i in range(0, 101):
             progressBar.setValue(i)
             t = time.time()
-            while time.time() < t + 0.1:
+            while time.time() < t + 0:
                app.processEvents()
 
         # Simulate something that takes time

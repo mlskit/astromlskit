@@ -41,8 +41,6 @@ class LogisticRegression(object):
 
         """
         
-        print type(xs)
-        
         if len(xs) != len(ys):
             raise ValueError("xs and ys should be the same length.")
         classes = set(ys)
@@ -142,10 +140,11 @@ class LogisticRegression(object):
 
 
 def main():
-    x=[[1,1],[2,2]]
-    y=[1,0]
-    my=LogisticRegression()
-    hello=my.train(x,y)
+        x=[[1,1],[2,2]]
+        y=[1,0]
+        print type(x)
+        my=LogisticRegression()
+        hello=my.train(x,y)
 
 
 main()

@@ -57,7 +57,9 @@ class Ui_Form(object):
         self.pushButton_3 = QtGui.QPushButton(Form)
         self.pushButton_3.setGeometry(QtCore.QRect(40, 240, 161, 23))
         self.pushButton_3.setObjectName(_fromUtf8("pushButton_3"))
-
+        self.pushButton.clicked.connect(self.takeinput)
+        #self.pushButton_2.clicked.connect(self.takeoutput)
+        self.pushButton_3.clicked.connect(self.startpoly)
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -74,3 +76,50 @@ class Ui_Form(object):
         self.pushButton.setText(_translate("Form", "Input File", None))
         self.pushButton_3.setText(_translate("Form", "Start", None))
 
+    def takeinput(self):
+        self.fname1 = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        self.xdata=[]
+        self.ydata=[]
+        for line in open(str(self.fname1)):
+            row=line.split("\n")[0].split(",")
+            self.ydata.append(row.pop())
+            self.xdata.append(row)
+        
+    def takeoutput(self):
+        self.fname2 = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        self.ydata=[]
+        for line in open(str(self.fname2)):
+            row=line.split("\n")[0].split(",")
+            self.ydata.append(row)
+        print self.ydata 
+    def startpoly(self):
+        import numpy as np
+        X=np.array(self.xdata)
+        Y=np.array(self.ydata)
+        print Y
+        X=[[float(y) for y in x] for x in X]
+        Y=[float(y) for y in Y]
+        from sklearn.linear_model import Ridge
+        from sklearn.preprocessing import PolynomialFeatures
+        from sklearn.pipeline import make_pipeline
+        predict=[0.49,0.18]
+        poly = PolynomialFeatures(degree=2)
+        X_ = poly.fit_transform(X)
+        predict_ = poly.fit_transform(predict)
+        
+        clf = linear_model.LinearRegression()
+        clf.fit(X_, vector)
+        print clf.predict(predict_)         
+
+        
+    
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    Dialog = QtGui.QDialog()
+    ui = Ui_Form()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
+        

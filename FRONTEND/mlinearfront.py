@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'multiplefront.ui'
-#
-# Created: Mon Apr 06 08:43:01 2015
-#      by: PyQt4 UI code generator 4.10.4
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -42,7 +33,9 @@ class Ui_Form(object):
         self.pushButton_2 = QtGui.QPushButton(Form)
         self.pushButton_2.setGeometry(QtCore.QRect(40, 110, 161, 23))
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
-
+        self.pushButton.clicked.connect(self.takeinput)
+        self.pushButton_2.clicked.connect(self.takeoutput)
+        self.pushButton_3.clicked.connect(self.startmlinear)
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -54,3 +47,42 @@ class Ui_Form(object):
         self.pushButton_3.setText(_translate("Form", "Start", None))
         self.pushButton_2.setText(_translate("Form", "Y-File", None))
 
+    def takeinput(self):
+        self.fname1 = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        self.xdata=[]
+        for line in open(str(self.fname1)):
+            row=line.split("\n")[0].split(",")
+            self.xdata.append(row)
+        
+    def takeoutput(self):
+        self.fname2 = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        self.ydata=[]
+        for line in open(str(self.fname2)):
+            row=line.split("\n")[0].split(",")
+            self.ydata.append(row)
+        print self.ydata
+        
+    def startmlinear(self):
+        import numpy as np
+        X=np.array(self.xdata)
+        Y=np.array(self.ydata)
+        X=[[float(y) for y in x] for x in X]
+        Y=[[float(y) for y in x] for x in Y]
+        from sklearn import linear_model
+        clf = linear_model.LinearRegression()
+        clf.fit (X,Y)
+        print clf.coef_
+    
+        
+
+        
+    
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    Dialog = QtGui.QDialog()
+    ui = Ui_Form()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())

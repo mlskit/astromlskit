@@ -111,7 +111,7 @@
     <string>Output Folder</string>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox_3">
+  <widget class="QGroupBox" name="groupBox_4">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -123,6 +123,19 @@
    <property name="title">
     <string>Options</string>
    </property>
+   <widget class="QCheckBox" name="checkBox_7">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Return Score</string>
+    </property>
+   </widget>
    <widget class="QCheckBox" name="checkBox_5">
     <property name="geometry">
      <rect>
@@ -135,45 +148,6 @@
     <property name="text">
      <string> Predict Probaibilty (x)</string>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_4">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>211</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Options</string>
-    </property>
-    <widget class="QCheckBox" name="checkBox_6">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>20</y>
-       <width>151</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string> Predict Probaibilty (x)</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_7">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>50</y>
-       <width>151</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Return Score</string>
-     </property>
-    </widget>
    </widget>
   </widget>
  </widget>

@@ -22,6 +22,12 @@ class Ui_Form(object):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(249, 398)
         
+        self.wbr=True
+        self.ign=True
+        self.norm=False
+        self.ngraph=False        
+        self.dm="euclidean"
+        
         self.groupBox = QtGui.QGroupBox(Form)
         self.groupBox.setGeometry(QtCore.QRect(20, 10, 221, 61))
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
@@ -41,6 +47,9 @@ class Ui_Form(object):
         self.checkBox = QtGui.QCheckBox(self.groupBox_2)
         self.checkBox.setGeometry(QtCore.QRect(30, 50, 171, 17))
         self.checkBox.setObjectName(_fromUtf8("checkBox"))
+        self.checkBox.stateChanged.connect(self.checkngraph)
+
+        
 
         self.spinBox = QtGui.QSpinBox(self.groupBox_2)
         self.spinBox.setGeometry(QtCore.QRect(150, 20, 42, 22))
@@ -75,10 +84,14 @@ class Ui_Form(object):
         self.checkBox_3 = QtGui.QCheckBox(self.groupBox_4)
         self.checkBox_3.setGeometry(QtCore.QRect(30, 50, 151, 17))
         self.checkBox_3.setObjectName(_fromUtf8("checkBox_3"))
+        self.checkBox_3.stateChanged.connect(self.checkign)
+
 
         self.checkBox_4 = QtGui.QCheckBox(self.groupBox_4)
         self.checkBox_4.setGeometry(QtCore.QRect(30, 80, 181, 17))
         self.checkBox_4.setObjectName(_fromUtf8("checkBox_4"))
+        self.checkBox_4.stateChanged.connect(self.checknorm)
+
 
         self.pushButton = QtGui.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(50, 300, 161, 23))
@@ -98,15 +111,39 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
+    def checkngraph(self):
+        print "graph checked"
+    def checkign(self):
+        print "ign checked"
+    def checknorm(self):
+        print "Normalised"
+
+    
     def startknn(self):
-        #print len(np.array(self.tr).shape),len(np.array(self.classlabels).shape)
-        a=train(self.tr,self.classlabels,self.k)
-        #print self.k
-        out=open("output.txt","w+")
-        for i in self.te:
-            print>>out,i,classify(a,i,distance_fn=self.dm)
-#            print classify(a,i,distance_fn=self.dm)
-        print "Done------------"
+        temp=[]
+        ff=open("knnout.txt","w+")
+        if self.wbr==False :
+            from sklearn.neighbors import KNeighborsClassifier
+            neigh = KNeighborsClassifier(n_neighbors=self.k)
+            neigh.fit(self.tr,self.classlabels)
+            for i in self.te:
+                temp.append(i)
+            print neigh.predict(temp)
+        elif self.ngraph==False:
+            from sklearn.neighbors import KNeighborsClassifier
+            neigh = KNeighborsClassifier(n_neighbors=self.k)
+            neigh.fit(self.tr,self.classlabels)
+            for i in self.te:
+                temp.append(i)
+            print>>ff,neigh.predict(temp)
+            A = neigh.kneighbors_graph(self.tr)
+            print A
+        else:
+            a=train(self.tr,self.classlabels,self.k)
+            out=open("output.txt","w+")
+            for i in self.te:
+                print>>out,i,classify(a,i,distance_fn=self.dm)
+        print "-------KNN --------Done------------"
         
     def takeinput(self):
         fname = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
@@ -119,19 +156,16 @@ class Ui_Form(object):
         print self.classlabels
         self.tr=(zip(x,y))
         
-        
 
     def takeoutput(self):
+        
         fname = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
         print type(fname)
         import pandas as pd
         df = pd.read_csv(str(fname), sep=",")
         x=list(df[list(df)[0]])
         y=list(df[list(df)[1]])
-        #print x,y
         self.te=(zip(x,y))
-        #print (self.te)
-        #print len(np.array(self.te).shape)
         
     def getdis(self,dis="euclidean"):
         if dis=="cityblock":
@@ -142,25 +176,24 @@ class Ui_Form(object):
             self.dm=chebyshev_distance
         print self.dm
     
-        
     def setk(self):
         self.k=self.spinBox.value()
         print self.k
         
     def retranslateUi(self, Form):
-        Form.setWindowTitle(_translate("Form", "Form", None))
+        Form.setWindowTitle(_translate("Form", "Knn Learner", None))
         self.groupBox.setTitle(_translate("Form", "Learner/Classifier Name", None))
         self.lineEdit.setText(_translate("Form", "K Nearest Neighbors", None))
         self.groupBox_2.setTitle(_translate("Form", "Neighbors", None))
         self.label.setText(_translate("Form", "Number of neighbors", None))
-        self.checkBox.setText(_translate("Form", "Wieigh by ranks not distances", None))
+        self.checkBox.setText(_translate("Form", "Print neighbors graph", None))
         self.groupBox_3.setTitle(_translate("Form", "Distance", None))
         self.checkBox_2.setText(_translate("Form", " Ignore Unknown Values", None))
         self.groupBox_4.setTitle(_translate("Form", "Distance", None))
         self.comboBox_2.setItemText(0, _translate("Form", "euclidean", None))
         self.comboBox_2.setItemText(1, _translate("Form", "chebychev", None))
         self.comboBox_2.setItemText(2, _translate("Form", "cityblock", None))
-        self.checkBox_3.setText(_translate("Form", " Ignore Unknown Values", None))
+        #self.checkBox_3.setText(_translate("Form", " Ignore Unknown Values", None))
         self.checkBox_4.setText(_translate("Form", " Normalize continous attributes", None))
         self.pushButton.setText(_translate("Form", "Input train File", None))
         self.pushButton_2.setText(_translate("Form", "Input test File", None))

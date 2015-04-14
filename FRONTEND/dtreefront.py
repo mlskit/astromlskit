@@ -27,10 +27,11 @@ class Ui_Form(object):
         self.fname=""
         self.temp=""
         self.todo="dtree"
-        self.bp="False"
-        self.v="False"
-        self.pdf="False"
+        self.bp=False
+        self.v=False
+        self.pdf=False
         self.tf=""
+        self.method="classification"
         self.lineEdit = QtGui.QLineEdit(self.groupBox)
         self.lineEdit.setGeometry(QtCore.QRect(40, 20, 141, 20))
         self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
@@ -108,22 +109,34 @@ class Ui_Form(object):
         self.pushButton_2.setText(_translate("Form", "Test File", None))
 
     def getmethod(self,txt):
-        print txt+" "+"selected"
+        print txt
 
     def takeinput(self):
         self.fname = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
-        print (self.fname)
+        #print (self.fname)
         self.a = Tree.build(Data(str(self.fname)))
-        
+        print self.a,"hello"
         
     def startdtree(self):
-        prediction = self.a.predict(dict(a=2,b=3,c=1,d=2))
-        print 'best:',prediction.best
-        print 'probs:',prediction.probs
+        temp=[]
+        for i in self.testdata:
+            i=map(int,i)
+            tata=dict(zip(self.header,i))
+            print tata
+            prediction = self.a.predict(tata)
+            temp.append(prediction.best)
+        print temp
 
     def takeoutput(self):
         self.tf = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
-        print str(self.tf)
+        self.testdata=[]
+        for line in open(str(self.tf)):
+            row=line.split("\n")[0].split(",")
+            self.testdata.append(row)
+        self.header=self.testdata[0]
+        self.testdata=self.testdata[1:]
+            
+        #print str(self.tf)
 
 
 if __name__ == "__main__":

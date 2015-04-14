@@ -139,14 +139,15 @@ class Ui_RandomForest(object):
                 forest.train(row)
             mae = forest.test(cdata2test)
             print 'Forest MAE:',mae.mean
-        if mae.mean==1.0:
-            print "WellDone!!!"
+        #if mae.mean==1.0:
+            #print "WellDone!!!"
         from pprint import pprint
         trees = list(forest.trees)
         trees.sort(key=lambda t:t.out_of_bag_mae.mean)
         print 'Best tree:'
         pprint(trees[-1].to_dict(), indent=4)
         #assertEqual(trees[-1].auto_grow, True)
+        print "--------- ALL TREES---------------"
         for tree in trees:
                     pprint(tree.to_dict(), indent=4)
         
@@ -173,7 +174,7 @@ class Ui_RandomForest(object):
         print self.samp/10.0
 
     def retranslateUi(self, RandomForest):
-        RandomForest.setWindowTitle(_translate("RandomForest", "Form", None))
+        RandomForest.setWindowTitle(_translate("RandomForest", "Forest Learner", None))
         self.groupBox.setTitle(_translate("RandomForest", "Learner/Classifier Name", None))
         self.lineEdit.setText(_translate("RandomForest", "Random Forest", None))
         self.groupBox_2.setTitle(_translate("RandomForest", "Options", None))
@@ -194,3 +195,11 @@ class Ui_RandomForest(object):
         self.pushButton_2.setText(_translate("RandomForest", "Test File", None))
         self.pushButton_3.setText(_translate("RandomForest", "Start", None))
 
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    Dialog = QtGui.QDialog()
+    ui = Ui_RandomForest()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())

@@ -45,6 +45,7 @@ class RidgeRegressor(object):
         self.params = np.dot(np.linalg.inv(np.dot(X.T, X) + np.dot(G.T, G)),
                              np.dot(X.T, y))
         print self.params
+        print "done"
  
     def predict(self, X):
         """
@@ -64,29 +65,29 @@ class RidgeRegressor(object):
         return np.dot(X, self.params)
  
  
-##if __name__ == '__main__':
-##    # Create synthetic data
-##    X = np.linspace(0, 6, 100)
-##    y=np.random.normal(size=len(X))/random.randint(1,1000)
-##    #yhat = y + .5 * np.random.normal(size=len(X))
-## 
-##    # Plot synthetic data
-##    plt.plot(X, y, 'g')
-##    #plt.plot(X, yhat, 'rx', label='noisy samples')
-## 
-##    # Create feature matrix
-##    tX = np.array([X]).T
-##    print tX,X
-##    #tX = np.hstack((tX, np.power(tX, 2), np.power(tX, 3)))
-##    #print tX
-## 
-##    # Plot regressors
-##    r = RidgeRegressor()
-##    r.fit(tX, y)
-##    #plt.plot(X, r.predict(tX), 'b', label=u'ŷ (alpha=0.0)')
-##    alpha = 3.0
-##    r.fit(tX, y, alpha)
-##    plt.plot(X, r.predict(tX), 'y', label=u'ŷ (alpha=%.1f)' % alpha)
-## 
-##    plt.legend()
-##    plt.show()
+if __name__ == '__main__':
+    # Create synthetic data
+    X = np.linspace(0, 6, 100)
+    y=np.random.normal(size=len(X))/random.randint(1,1000)
+    #yhat = y + .5 * np.random.normal(size=len(X))
+ 
+    # Plot synthetic data
+    plt.plot(X, y, 'g')
+    #plt.plot(X, yhat, 'rx', label='noisy samples')
+ 
+    # Create feature matrix
+    tX = np.array([X]).T
+    print tX
+    #tX = np.hstack((tX, np.power(tX, 2), np.power(tX, 3)))
+    print tX
+ 
+    # Plot regressors
+    r = RidgeRegressor()
+    r.fit(tX, y)
+    #plt.plot(X, r.predict(tX), 'b', label=u'ŷ (alpha=0.0)')
+    alpha = 3.0
+    r.fit(tX, y, alpha)
+    plt.plot(X, r.predict(tX), 'y', label=u'ŷ (alpha=%.1f)' % alpha)
+ 
+    plt.legend()
+    plt.show()

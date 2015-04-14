@@ -4,7 +4,7 @@ import numpy as np
 import scipy as sp
 import scipy.linalg as linalg
 
-class LDA_Classifier():
+class LDA():
     """
     Classification using linear discriminant analysis (LDA)
     References:
@@ -26,7 +26,7 @@ class LDA_Classifier():
         # check the classification accuracy
         label + 1 - Y_test
     """
-    def Train(self,X,Y):
+    def train(self,X,Y):
         """Train a LDA classifier from a labeled dataset."""
         classLabels = np.unique(Y)
         classNum = len(classLabels)
@@ -54,7 +54,7 @@ class LDA_Classifier():
         # project the mean vectors of each class onto the LDA space
         self.projected_centroid = [np.dot(mu,self.discriminant_vector) for mu,class_size in classMean]
 
-    def Test(self,X):
+    def predict(self,X):
         """Apply the trained LDA classifier on test data."""
         #project test data onto LDA directions
         projected_data  = np.dot(X,self.discriminant_vector)

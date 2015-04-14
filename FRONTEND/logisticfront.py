@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+import numpy as np
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -42,6 +43,9 @@ class Ui_Form(object):
         self.pushButton_2 = QtGui.QPushButton(Form)
         self.pushButton_2.setGeometry(QtCore.QRect(30, 110, 161, 23))
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+        self.pushButton_3.clicked.connect(self.startlog)
+        self.pushButton.clicked.connect(self.takeinput)
+        self.pushButton_2.clicked.connect(self.takeoutput)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -53,4 +57,43 @@ class Ui_Form(object):
         self.pushButton_3.setText(_translate("Form", "Start ", None))
         self.pushButton.setText(_translate("Form", "Train File ", None))
         self.pushButton_2.setText(_translate("Form", "Test File", None))
+    def takeinput(self):
+        fname = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        self.traindata=[]
+        self.trainclass=[]
+        for line in open(str(fname)):
+            row=line.split("\n")[0].split(",")
+            classlabel=row.pop()
+            self.traindata.append(row)
+            self.trainclass.append(classlabel)             
+        print "-----training complete ----"
+            
+    def startlog(self):
+        from sklearn.linear_model import LogisticRegression
+        model = LogisticRegression()
+        X=np.array(self.traindata)
+        Y=np.array(self.trainclass)
+        y=self.testdata
+        X=[[float(y) for y in x] for x in X]
+        Y=[[int(y) for y in x] for x in Y]
+        y=[[float(y) for y in x] for x in self.testdata]
+        model = model.fit(X,Y)
+        print model.predict(y)
+        
+    def takeoutput(self):
+        fname = QtGui.QFileDialog.getOpenFileName(None, 'Open file', 'C:')
+        self.testdata=[]
+        for line in open(str(fname)):
+            row=line.split("\n")[0].split(",")
+            self.testdata.append(row) 
+        print "---test data taken successfully---"
 
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    Dialog = QtGui.QDialog()
+    ui = Ui_Form()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
